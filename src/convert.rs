@@ -27,12 +27,12 @@ macro_rules! from_conversion {
     };
 }
 
-from_conversion!(|value: TwoFloat| -> (f64, f64) { (value.hi, value.lo) });
+from_conversion!(|value: TwoFloat| -> (f32, f32) { (value.hi, value.lo) });
 
-impl TryFrom<(f64, f64)> for TwoFloat {
+impl TryFrom<(f32, f32)> for TwoFloat {
     type Error = TwoFloatError;
 
-    fn try_from(value: (f64, f64)) -> Result<Self, Self::Error> {
+    fn try_from(value: (f32, f32)) -> Result<Self, Self::Error> {
         if no_overlap(value.0, value.1) {
             Ok(Self {
                 hi: value.0,
@@ -44,12 +44,12 @@ impl TryFrom<(f64, f64)> for TwoFloat {
     }
 }
 
-from_conversion!(|value: TwoFloat| -> [f64; 2] { [value.hi, value.lo] });
+from_conversion!(|value: TwoFloat| -> [f32; 2] { [value.hi, value.lo] });
 
-impl TryFrom<[f64; 2]> for TwoFloat {
+impl TryFrom<[f32; 2]> for TwoFloat {
     type Error = TwoFloatError;
 
-    fn try_from(value: [f64; 2]) -> Result<Self, Self::Error> {
+    fn try_from(value: [f32; 2]) -> Result<Self, Self::Error> {
         if no_overlap(value[0], value[1]) {
             Ok(Self {
                 hi: value[0],
@@ -66,7 +66,7 @@ macro_rules! float_convert {
         impl From<$type> for TwoFloat {
             fn from(value: $type) -> Self {
                 Self {
-                    hi: value as f64,
+                    hi: value as f32,
                     lo: 0.0,
                 }
             }
@@ -84,15 +84,15 @@ macro_rules! int_convert {
         impl From<$type> for TwoFloat {
             fn from(value: $type) -> Self {
                 Self {
-                    hi: value as f64,
+                    hi: value as f32,
                     lo: 0.0,
                 }
             }
         }
 
         from_conversion!(|value: TwoFloat| -> Result<$type, TwoFloatError> {
-            const LOWER_BOUND: f64 = $type::MIN as f64;
-            const UPPER_BOUND: f64 = $type::MAX as f64;
+            const LOWER_BOUND: f32 = $type::MIN as f32;
+            const UPPER_BOUND: f32 = $type::MAX as f32;
             let truncated = value.trunc();
             if !(LOWER_BOUND..=UPPER_BOUND).contains(&truncated) {
                 Err(Self::Error::ConversionError {})
@@ -114,13 +114,13 @@ macro_rules! bigint_convert {
     ($type:tt) => {
         impl From<$type> for TwoFloat {
             fn from(value: $type) -> Self {
-                let a = value as f64;
-                let b = if a == $type::MAX as f64 {
-                    -((($type::MAX - value) + 1) as f64)
+                let a = value as f32;
+                let b = if a == $type::MAX as f32 {
+                    -((($type::MAX - value) + 1) as f32)
                 } else if value >= a as $type {
-                    (value - a as $type) as f64
+                    (value - a as $type) as f32
                 } else {
-                    -((a as $type - value) as f64)
+                    -((a as $type - value) as f32)
                 };
 
                 Self { hi: a, lo: b }
@@ -129,12 +129,12 @@ macro_rules! bigint_convert {
 
         from_conversion!(|value: TwoFloat| -> Result<$type, TwoFloatError> {
             const LOWER_BOUND: TwoFloat = TwoFloat {
-                hi: $type::MIN as f64,
+                hi: $type::MIN as f32,
                 lo: 0.0,
             };
 
             const UPPER_BOUND: TwoFloat = TwoFloat {
-                hi: $type::MAX as f64,
+                hi: $type::MAX as f32,
                 lo: -1.0,
             };
 

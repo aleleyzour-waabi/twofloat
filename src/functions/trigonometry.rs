@@ -1,6 +1,6 @@
 use core::convert::TryFrom;
 
-use hexf::hexf64;
+use hexf::hexf32;
 
 use crate::{
     consts::{FRAC_PI_2, FRAC_PI_4, PI},
@@ -10,243 +10,243 @@ use crate::{
 // Polynomial coefficients of sin(x)-x on [0,pi/4]
 const SIN_COEFFS: [TwoFloat; 7] = [
     TwoFloat {
-        hi: hexf64!("-0x1.5555555555555p-3"),
-        lo: hexf64!("-0x1.3a26e9901c14ap-57"),
+        hi: hexf32!("-0x1.555556p-3"),
+        lo: hexf32!("-0x1.3a26eap-57"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.1111111111105p-7"),
-        lo: hexf64!("-0x1.487cfb2f402fap-63"),
+        hi: hexf32!("0x1.111112p-7"),
+        lo: hexf32!("-0x1.487cfcp-63"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.a01a01a017e07p-13"),
-        lo: hexf64!("-0x1.22340ff667d3fp-67"),
+        hi: hexf32!("-0x1.a01a02p-13"),
+        lo: hexf32!("-0x1.223410p-67"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.71de3a526314fp-19"),
-        lo: hexf64!("0x1.1ddd0a161cfa7p-75"),
+        hi: hexf32!("0x1.71de3ap-19"),
+        lo: hexf32!("0x1.1ddd0ap-75"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.ae6451ad6a8ebp-26"),
-        lo: hexf64!("0x1.cb014c3ddfd85p-84"),
+        hi: hexf32!("-0x1.ae6452p-26"),
+        lo: hexf32!("0x1.cb014cp-84"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.612010f363e7dp-33"),
-        lo: hexf64!("0x1.0dba7b1b83a01p-88"),
+        hi: hexf32!("0x1.612010p-33"),
+        lo: hexf32!("0x1.0dba7cp-88"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.aa6c431516f76p-41"),
-        lo: hexf64!("0x1.df71e9b9b179bp-95"),
+        hi: hexf32!("-0x1.aa6c44p-41"),
+        lo: hexf32!("0x1.df71eap-95"),
     },
 ];
 
 // Polynomial coefficients of cos(x)-1+x^2/2 on [0,pi/4]
 const COS_COEFFS: [TwoFloat; 7] = [
     TwoFloat {
-        hi: hexf64!("0x1.5555555555555p-5"),
-        lo: hexf64!("0x1.4b27f9ddea57ap-59"),
+        hi: hexf32!("0x1.555556p-5"),
+        lo: hexf32!("0x1.4b27fap-59"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.6c16c16c16c0fp-10"),
-        lo: hexf64!("0x1.1e7208a68629bp-64"),
+        hi: hexf32!("-0x1.6c16c2p-10"),
+        lo: hexf32!("0x1.1e7208p-64"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.a01a01a018bcdp-16"),
-        lo: hexf64!("0x1.adea7f883a49cp-71"),
+        hi: hexf32!("0x1.a01a02p-16"),
+        lo: hexf32!("0x1.adea80p-71"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.27e4fb75e002ap-22"),
-        lo: hexf64!("-0x1.a26582a390382p-76"),
+        hi: hexf32!("-0x1.27e4fcp-22"),
+        lo: hexf32!("-0x1.a26582p-76"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.1eed8c87a5a51p-29"),
-        lo: hexf64!("-0x1.551d13b8d9c61p-85"),
+        hi: hexf32!("0x1.1eed8cp-29"),
+        lo: hexf32!("-0x1.551d14p-85"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.93931ca96bc22p-37"),
-        lo: hexf64!("0x1.25124fcc17b3fp-91"),
+        hi: hexf32!("-0x1.93931cp-37"),
+        lo: hexf32!("0x1.251250p-91"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.aabaa8059719cp-45"),
-        lo: hexf64!("0x1.4cf2f15ef56d1p-99"),
+        hi: hexf32!("0x1.aabaa8p-45"),
+        lo: hexf32!("0x1.4cf2f2p-99"),
     },
 ];
 
 // Polynomial coefficients of tan(x)-x on [0,pi/4]
 const TAN_COEFFS: [TwoFloat; 14] = [
     TwoFloat {
-        hi: hexf64!("0x1.555555555530fp-2"),
-        lo: hexf64!("-0x1.38ef22c4b8238p-56"),
+        hi: hexf32!("0x1.555556p-2"),
+        lo: hexf32!("-0x1.38ef22p-56"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.111111112c40ap-3"),
-        lo: hexf64!("0x1.db464d0cd9cb4p-57"),
+        hi: hexf32!("0x1.111112p-3"),
+        lo: hexf32!("0x1.db464ep-57"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.ba1ba1a984e9fp-5"),
-        lo: hexf64!("0x1.b2454b6b23d17p-61"),
+        hi: hexf32!("0x1.ba1ba2p-5"),
+        lo: hexf32!("0x1.b2454cp-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.664f4b43a4fefp-6"),
-        lo: hexf64!("0x1.bb1ac07d3ba2fp-61"),
+        hi: hexf32!("0x1.664f4cp-6"),
+        lo: hexf32!("0x1.bb1ac0p-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.226ded039b30dp-7"),
-        lo: hexf64!("-0x1.9110570c2853ap-63"),
+        hi: hexf32!("0x1.226deep-7"),
+        lo: hexf32!("-0x1.911058p-63"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.d6ddaf4100a51p-9"),
-        lo: hexf64!("-0x1.654e37a706894p-65"),
+        hi: hexf32!("0x1.d6ddb0p-9"),
+        lo: hexf32!("-0x1.654e38p-65"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.7d2be8d9e1761p-10"),
-        lo: hexf64!("-0x1.d33168adc5b21p-64"),
+        hi: hexf32!("0x1.7d2be8p-10"),
+        lo: hexf32!("-0x1.d33168p-64"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.395c8b79b1e68p-11"),
-        lo: hexf64!("-0x1.5c77d3711fefdp-66"),
+        hi: hexf32!("0x1.395c8cp-11"),
+        lo: hexf32!("-0x1.5c77d4p-66"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.c3c79cdabdf3ep-13"),
-        lo: hexf64!("0x1.7af98e21b704bp-69"),
+        hi: hexf32!("0x1.c3c79cp-13"),
+        lo: hexf32!("0x1.7af98ep-69"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.399dadec87c3ap-13"),
-        lo: hexf64!("-0x1.793a97fd365d5p-68"),
+        hi: hexf32!("0x1.399daep-13"),
+        lo: hexf32!("-0x1.793a98p-68"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.6a82ab57290c9p-15"),
-        lo: hexf64!("0x1.48e1069bffaafp-73"),
+        hi: hexf32!("-0x1.6a82acp-15"),
+        lo: hexf32!("0x1.48e106p-73"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.b3221d6d8c4b6p-14"),
-        lo: hexf64!("-0x1.049e004213205p-69"),
+        hi: hexf32!("0x1.b3221ep-14"),
+        lo: hexf32!("-0x1.049e00p-69"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.b4a2a3d0229eap-15"),
-        lo: hexf64!("0x1.cb2115b70d6e3p-69"),
+        hi: hexf32!("-0x1.b4a2a4p-15"),
+        lo: hexf32!("0x1.cb2116p-69"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.7917a05c89f91p-16"),
-        lo: hexf64!("-0x1.9ff84f5cc7024p-70"),
+        hi: hexf32!("0x1.7917a0p-16"),
+        lo: hexf32!("-0x1.9ff850p-70"),
     },
 ];
 
 // Polynomial coefficients of asin(x)-x on [0,0.5]
 const ASIN_COEFFS: [TwoFloat; 10] = [
     TwoFloat {
-        hi: hexf64!("0x1.5555555505a93p-3"),
-        lo: hexf64!("0x1.d240d1c705854p-58"),
+        hi: hexf32!("0x1.555556p-3"),
+        lo: hexf32!("0x1.d240d2p-58"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.333333830962bp-4"),
-        lo: hexf64!("-0x1.af55ce0405fecp-62"),
+        hi: hexf32!("0x1.333334p-4"),
+        lo: hexf32!("-0x1.af55cep-62"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.6db6bb3abd092p-5"),
-        lo: hexf64!("-0x1.cfdfea864322ap-61"),
+        hi: hexf32!("0x1.6db6bcp-5"),
+        lo: hexf32!("-0x1.cfdfeap-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.f1ce012f15aafp-6"),
-        lo: hexf64!("0x1.5fe81afd0c561p-72"),
+        hi: hexf32!("0x1.f1ce02p-6"),
+        lo: hexf32!("0x1.5fe81ap-72"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.6e1af8b2e827ep-6"),
-        lo: hexf64!("-0x1.b3283f59c2f09p-60"),
+        hi: hexf32!("0x1.6e1af8p-6"),
+        lo: hexf32!("-0x1.b32840p-60"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.20d826a6a4d9fp-6"),
-        lo: hexf64!("-0x1.2408819e30e3ep-61"),
+        hi: hexf32!("0x1.20d826p-6"),
+        lo: hexf32!("-0x1.240882p-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.8d6db633c567p-7"),
-        lo: hexf64!("0x1.58838200dd463p-61"),
+        hi: hexf32!("0x1.8d6db6p-7"),
+        lo: hexf32!("0x1.588382p-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.3c047f5666c57p-6"),
-        lo: hexf64!("-0x1.c0881063edf9dp-62"),
+        hi: hexf32!("0x1.3c0480p-6"),
+        lo: hexf32!("-0x1.c08810p-62"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.401c69a113918p-7"),
-        lo: hexf64!("-0x1.838c090a26969p-64"),
+        hi: hexf32!("-0x1.401c6ap-7"),
+        lo: hexf32!("-0x1.838c0ap-64"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.119827a2d86aap-5"),
-        lo: hexf64!("-0x1.fa4bf3377ba39p-59"),
+        hi: hexf32!("0x1.119828p-5"),
+        lo: hexf32!("-0x1.fa4bf4p-59"),
     },
 ];
 
 // Polynomial coefficients of atan(x) - x on [0, 7/16]
 const ATAN_COEFFS: [TwoFloat; 15] = [
     TwoFloat {
-        hi: hexf64!("-0x1.5555555555555p-2"),
-        lo: hexf64!("-0x1.5381cace077adp-56"),
+        hi: hexf32!("-0x1.555556p-2"),
+        lo: hexf32!("-0x1.5381cap-56"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.9999999999998p-3"),
-        lo: hexf64!("0x1.4577ef010e069p-57"),
+        hi: hexf32!("0x1.99999ap-3"),
+        lo: hexf32!("0x1.4577f0p-57"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.24924924923d5p-3"),
-        lo: hexf64!("-0x1.431a104911639p-57"),
+        hi: hexf32!("-0x1.24924ap-3"),
+        lo: hexf32!("-0x1.431a10p-57"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.c71c71c71501dp-4"),
-        lo: hexf64!("-0x1.5849ad667389fp-61"),
+        hi: hexf32!("0x1.c71c72p-4"),
+        lo: hexf32!("-0x1.5849aep-61"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.745d17445bf06p-4"),
-        lo: hexf64!("0x1.bb4a56bf72341p-58"),
+        hi: hexf32!("-0x1.745d18p-4"),
+        lo: hexf32!("0x1.bb4a56p-58"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.3b13b109e4298p-4"),
-        lo: hexf64!("-0x1.e54aeaea9366cp-59"),
+        hi: hexf32!("0x1.3b13b2p-4"),
+        lo: hexf32!("-0x1.e54aeap-59"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.11110c8317554p-4"),
-        lo: hexf64!("0x1.fe1cb3fb72cafp-62"),
+        hi: hexf32!("-0x1.11110cp-4"),
+        lo: hexf32!("0x1.fe1cb4p-62"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.e1e14573d9e46p-5"),
-        lo: hexf64!("-0x1.9e0fa521514a9p-59"),
+        hi: hexf32!("0x1.e1e146p-5"),
+        lo: hexf32!("-0x1.9e0fa6p-59"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.af20ae13002ecp-5"),
-        lo: hexf64!("0x1.ac847d2d89e0cp-59"),
+        hi: hexf32!("-0x1.af20aep-5"),
+        lo: hexf32!("0x1.ac847ep-59"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.85cf5eca1206ap-5"),
-        lo: hexf64!("0x1.1e116d4ec0f01p-62"),
+        hi: hexf32!("0x1.85cf5ep-5"),
+        lo: hexf32!("0x1.1e116ep-62"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.622b3e8cca965p-5"),
-        lo: hexf64!("-0x1.facb65280deecp-60"),
+        hi: hexf32!("-0x1.622b3ep-5"),
+        lo: hexf32!("-0x1.facb66p-60"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.3d3ea913f5499p-5"),
-        lo: hexf64!("-0x1.5fa025bf396bbp-59"),
+        hi: hexf32!("0x1.3d3eaap-5"),
+        lo: hexf32!("-0x1.5fa026p-59"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.07d293dcdabe9p-5"),
-        lo: hexf64!("-0x1.7b32fa28e715p-59"),
+        hi: hexf32!("-0x1.07d294p-5"),
+        lo: hexf32!("-0x1.7b32fap-59"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.5f9188357ee62p-6"),
-        lo: hexf64!("-0x1.a21e25eaaf1d8p-66"),
+        hi: hexf32!("0x1.5f9188p-6"),
+        lo: hexf32!("-0x1.a21e26p-66"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.09daee4762a73p-7"),
-        lo: hexf64!("0x1.fbd4cc667e59dp-61"),
+        hi: hexf32!("-0x1.09daeep-7"),
+        lo: hexf32!("0x1.fbd4ccp-61"),
     },
 ];
 
 const ATAN_FRAC_1_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.dac670561bb4fp-2"),
-    lo: hexf64!("0x1.a2b7f222f65e2p-56"),
+    hi: hexf32!("0x1.dac670p-2"),
+    lo: hexf32!("0x1.a2b7f2p-56"),
 };
 
 const ATAN_FRAC_3_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.f730bd281f69bp-1"),
-    lo: hexf64!("0x1.007887af0cbbdp-56"),
+    hi: hexf32!("0x1.f730bep-1"),
+    lo: hexf32!("0x1.007888p-56"),
 };
 
 fn quadrant(value: TwoFloat) -> (TwoFloat, i8) {
@@ -297,7 +297,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.sin();
-    /// let c = 2.5f64.sin();
+    /// let c = 2.5f32.sin();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -322,7 +322,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.cos();
-    /// let c = 2.5f64.cos();
+    /// let c = 2.5f32.cos();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -350,8 +350,8 @@ impl TwoFloat {
     /// let a = TwoFloat::from(2.5);
     /// let (s, c) = a.sin_cos();
     ///
-    /// assert!((s - 2.5f64.sin()).abs() < 1e-10);
-    /// assert!((c - 2.5f64.cos()).abs() < 1e-10);
+    /// assert!((s - 2.5f32.sin()).abs() < 1e-10);
+    /// assert!((c - 2.5f32.cos()).abs() < 1e-10);
     /// ```
     pub fn sin_cos(self) -> (Self, Self) {
         if !self.is_valid() {
@@ -376,7 +376,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.tan();
-    /// let c = 2.5f64.tan();
+    /// let c = 2.5f32.tan();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -401,7 +401,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(0.7);
     /// let b = a.asin();
-    /// let c = 0.7f64.asin();
+    /// let c = 0.7f32.asin();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -431,7 +431,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(-0.8);
     /// let b = a.acos();
-    /// let c = (-0.8f64).acos();
+    /// let c = (-0.8f32).acos();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -453,7 +453,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(3.5);
     /// let b = a.atan();
-    /// let c = 3.5f64.atan();
+    /// let c = 3.5f32.atan();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -540,7 +540,7 @@ mod tests {
         TwoFloat,
     };
 
-    const THRESHOLD: f64 = 1e-10;
+    const THRESHOLD: f32 = 1e-10;
 
     #[test]
     fn quadrant_test() {
@@ -564,62 +564,62 @@ mod tests {
     fn sin_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).sin());
 
-        assert!((0.5f64.sin() - TwoFloat::from(0.5).sin()).abs() < THRESHOLD);
-        assert!((1.4f64.sin() - TwoFloat::from(1.4).sin()).abs() < THRESHOLD);
-        assert!((3.0f64.sin() - TwoFloat::from(3.0).sin()).abs() < THRESHOLD);
-        assert!((4.0f64.sin() - TwoFloat::from(4.0).sin()).abs() < THRESHOLD);
-        assert!((6.0f64.sin() - TwoFloat::from(6.0).sin()).abs() < THRESHOLD);
+        assert!((0.5f32.sin() - TwoFloat::from(0.5).sin()).abs() < THRESHOLD);
+        assert!((1.4f32.sin() - TwoFloat::from(1.4).sin()).abs() < THRESHOLD);
+        assert!((3.0f32.sin() - TwoFloat::from(3.0).sin()).abs() < THRESHOLD);
+        assert!((4.0f32.sin() - TwoFloat::from(4.0).sin()).abs() < THRESHOLD);
+        assert!((6.0f32.sin() - TwoFloat::from(6.0).sin()).abs() < THRESHOLD);
 
-        assert!((0.5f64.sin() + TwoFloat::from(-0.5).sin()).abs() < THRESHOLD);
-        assert!((1.4f64.sin() + TwoFloat::from(-1.4).sin()).abs() < THRESHOLD);
-        assert!((3.0f64.sin() + TwoFloat::from(-3.0).sin()).abs() < THRESHOLD);
-        assert!((4.0f64.sin() + TwoFloat::from(-4.0).sin()).abs() < THRESHOLD);
-        assert!((6.0f64.sin() + TwoFloat::from(-6.0).sin()).abs() < THRESHOLD);
+        assert!((0.5f32.sin() + TwoFloat::from(-0.5).sin()).abs() < THRESHOLD);
+        assert!((1.4f32.sin() + TwoFloat::from(-1.4).sin()).abs() < THRESHOLD);
+        assert!((3.0f32.sin() + TwoFloat::from(-3.0).sin()).abs() < THRESHOLD);
+        assert!((4.0f32.sin() + TwoFloat::from(-4.0).sin()).abs() < THRESHOLD);
+        assert!((6.0f32.sin() + TwoFloat::from(-6.0).sin()).abs() < THRESHOLD);
     }
 
     #[test]
     fn cos_test() {
         assert_eq!(1.0, TwoFloat::from(0.0).cos());
 
-        assert!((0.5f64.cos() - TwoFloat::from(0.5).cos()).abs() < THRESHOLD);
-        assert!((1.4f64.cos() - TwoFloat::from(1.4).cos()).abs() < THRESHOLD);
-        assert!((3.0f64.cos() - TwoFloat::from(3.0).cos()).abs() < THRESHOLD);
-        assert!((4.0f64.cos() - TwoFloat::from(4.0).cos()).abs() < THRESHOLD);
-        assert!((6.0f64.cos() - TwoFloat::from(6.0).cos()).abs() < THRESHOLD);
+        assert!((0.5f32.cos() - TwoFloat::from(0.5).cos()).abs() < THRESHOLD);
+        assert!((1.4f32.cos() - TwoFloat::from(1.4).cos()).abs() < THRESHOLD);
+        assert!((3.0f32.cos() - TwoFloat::from(3.0).cos()).abs() < THRESHOLD);
+        assert!((4.0f32.cos() - TwoFloat::from(4.0).cos()).abs() < THRESHOLD);
+        assert!((6.0f32.cos() - TwoFloat::from(6.0).cos()).abs() < THRESHOLD);
 
-        assert!((0.5f64.cos() - TwoFloat::from(-0.5).cos()).abs() < THRESHOLD);
-        assert!((1.4f64.cos() - TwoFloat::from(-1.4).cos()).abs() < THRESHOLD);
-        assert!((3.0f64.cos() - TwoFloat::from(-3.0).cos()).abs() < THRESHOLD);
-        assert!((4.0f64.cos() - TwoFloat::from(-4.0).cos()).abs() < THRESHOLD);
-        assert!((6.0f64.cos() - TwoFloat::from(-6.0).cos()).abs() < THRESHOLD);
+        assert!((0.5f32.cos() - TwoFloat::from(-0.5).cos()).abs() < THRESHOLD);
+        assert!((1.4f32.cos() - TwoFloat::from(-1.4).cos()).abs() < THRESHOLD);
+        assert!((3.0f32.cos() - TwoFloat::from(-3.0).cos()).abs() < THRESHOLD);
+        assert!((4.0f32.cos() - TwoFloat::from(-4.0).cos()).abs() < THRESHOLD);
+        assert!((6.0f32.cos() - TwoFloat::from(-6.0).cos()).abs() < THRESHOLD);
     }
 
     #[test]
     fn tan_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).tan());
 
-        assert!((0.5f64.tan() - TwoFloat::from(0.5).tan()).abs() < THRESHOLD);
-        assert!((1.4f64.tan() - TwoFloat::from(1.4).tan()).abs() < THRESHOLD);
-        assert!((3.0f64.tan() - TwoFloat::from(3.0).tan()).abs() < THRESHOLD);
-        assert!((4.0f64.tan() - TwoFloat::from(4.0).tan()).abs() < THRESHOLD);
-        assert!((6.0f64.tan() - TwoFloat::from(6.0).tan()).abs() < THRESHOLD);
+        assert!((0.5f32.tan() - TwoFloat::from(0.5).tan()).abs() < THRESHOLD);
+        assert!((1.4f32.tan() - TwoFloat::from(1.4).tan()).abs() < THRESHOLD);
+        assert!((3.0f32.tan() - TwoFloat::from(3.0).tan()).abs() < THRESHOLD);
+        assert!((4.0f32.tan() - TwoFloat::from(4.0).tan()).abs() < THRESHOLD);
+        assert!((6.0f32.tan() - TwoFloat::from(6.0).tan()).abs() < THRESHOLD);
 
-        assert!((0.5f64.tan() + TwoFloat::from(-0.5).tan()).abs() < THRESHOLD);
-        assert!((1.4f64.tan() + TwoFloat::from(-1.4).tan()).abs() < THRESHOLD);
-        assert!((3.0f64.tan() + TwoFloat::from(-3.0).tan()).abs() < THRESHOLD);
-        assert!((4.0f64.tan() + TwoFloat::from(-4.0).tan()).abs() < THRESHOLD);
-        assert!((6.0f64.tan() + TwoFloat::from(-6.0).tan()).abs() < THRESHOLD);
+        assert!((0.5f32.tan() + TwoFloat::from(-0.5).tan()).abs() < THRESHOLD);
+        assert!((1.4f32.tan() + TwoFloat::from(-1.4).tan()).abs() < THRESHOLD);
+        assert!((3.0f32.tan() + TwoFloat::from(-3.0).tan()).abs() < THRESHOLD);
+        assert!((4.0f32.tan() + TwoFloat::from(-4.0).tan()).abs() < THRESHOLD);
+        assert!((6.0f32.tan() + TwoFloat::from(-6.0).tan()).abs() < THRESHOLD);
     }
 
     #[test]
     fn asin_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).asin());
-        assert!((0.25f64.asin() - TwoFloat::from(0.25).asin()) < THRESHOLD);
-        assert!((0.75f64.asin() - TwoFloat::from(0.75).asin()) < THRESHOLD);
+        assert!((0.25f32.asin() - TwoFloat::from(0.25).asin()) < THRESHOLD);
+        assert!((0.75f32.asin() - TwoFloat::from(0.75).asin()) < THRESHOLD);
         assert!((TwoFloat::from(1.0).asin() - FRAC_PI_2).abs() < THRESHOLD);
 
-        assert!((0.25f64.asin() + TwoFloat::from(-0.25).asin()) < THRESHOLD);
-        assert!((0.75f64.asin() + TwoFloat::from(-0.75).asin()) < THRESHOLD);
+        assert!((0.25f32.asin() + TwoFloat::from(-0.25).asin()) < THRESHOLD);
+        assert!((0.75f32.asin() + TwoFloat::from(-0.75).asin()) < THRESHOLD);
         assert!((TwoFloat::from(-1.0).asin() + FRAC_PI_2).abs() < THRESHOLD);
     }
 
@@ -627,12 +627,12 @@ mod tests {
     fn acos_test() {
         assert!((TwoFloat::from(0.0).acos() - FRAC_PI_2).abs() < THRESHOLD);
 
-        assert!((0.25f64.acos() - TwoFloat::from(0.25).acos()) < THRESHOLD);
-        assert!((0.75f64.acos() - TwoFloat::from(0.75).acos()) < THRESHOLD);
+        assert!((0.25f32.acos() - TwoFloat::from(0.25).acos()) < THRESHOLD);
+        assert!((0.75f32.acos() - TwoFloat::from(0.75).acos()) < THRESHOLD);
         assert_eq!(0.0, TwoFloat::from(1.0).acos());
 
-        assert!((0.25f64.asin() - TwoFloat::from(-0.25).acos()) < THRESHOLD);
-        assert!((0.75f64.asin() - TwoFloat::from(-0.75).acos()) < THRESHOLD);
+        assert!((0.25f32.asin() - TwoFloat::from(-0.25).acos()) < THRESHOLD);
+        assert!((0.75f32.asin() - TwoFloat::from(-0.75).acos()) < THRESHOLD);
         assert!((TwoFloat::from(-1.0).acos() - PI).abs() < THRESHOLD);
     }
 
@@ -640,17 +640,17 @@ mod tests {
     fn atan_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).atan());
 
-        assert!((0.25f64.atan() - TwoFloat::from(0.25).atan()).abs() < THRESHOLD);
-        assert!((0.5f64.atan() - TwoFloat::from(0.5).atan()).abs() < THRESHOLD);
+        assert!((0.25f32.atan() - TwoFloat::from(0.25).atan()).abs() < THRESHOLD);
+        assert!((0.5f32.atan() - TwoFloat::from(0.5).atan()).abs() < THRESHOLD);
         assert!((FRAC_PI_4 - TwoFloat::from(1.0).atan()).abs() < THRESHOLD);
-        assert!((2.25f64.atan() - TwoFloat::from(2.25).atan()).abs() < THRESHOLD);
-        assert!((10.0f64.atan() - TwoFloat::from(10.0).atan()).abs() < THRESHOLD);
+        assert!((2.25f32.atan() - TwoFloat::from(2.25).atan()).abs() < THRESHOLD);
+        assert!((10.0f32.atan() - TwoFloat::from(10.0).atan()).abs() < THRESHOLD);
 
-        assert!((0.25f64.atan() + TwoFloat::from(-0.25).atan()).abs() < THRESHOLD);
-        assert!((0.5f64.atan() + TwoFloat::from(-0.5).atan()).abs() < THRESHOLD);
+        assert!((0.25f32.atan() + TwoFloat::from(-0.25).atan()).abs() < THRESHOLD);
+        assert!((0.5f32.atan() + TwoFloat::from(-0.5).atan()).abs() < THRESHOLD);
         assert!((FRAC_PI_4 + TwoFloat::from(-1.0).atan()).abs() < THRESHOLD);
-        assert!((2.25f64.atan() + TwoFloat::from(-2.25).atan()).abs() < THRESHOLD);
-        assert!((10.0f64.atan() + TwoFloat::from(-10.0).atan()).abs() < THRESHOLD);
+        assert!((2.25f32.atan() + TwoFloat::from(-2.25).atan()).abs() < THRESHOLD);
+        assert!((10.0f32.atan() + TwoFloat::from(-10.0).atan()).abs() < THRESHOLD);
     }
 
     #[test]
@@ -662,7 +662,7 @@ mod tests {
         assert_eq!(FRAC_PI_2, TwoFloat::from(1.0).atan2(TwoFloat::from(0.0)));
         assert_eq!(-FRAC_PI_2, TwoFloat::from(-1.0).atan2(TwoFloat::from(0.0)));
         assert!(
-            (0.73f64.atan2(0.21f64) - TwoFloat::from(0.73).atan2(TwoFloat::from(0.21))).abs()
+            (0.73f32.atan2(0.21f32) - TwoFloat::from(0.73).atan2(TwoFloat::from(0.21))).abs()
                 < THRESHOLD
         );
     }

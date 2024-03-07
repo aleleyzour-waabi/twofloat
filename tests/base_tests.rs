@@ -9,17 +9,17 @@ pub mod common;
 use common::*;
 
 #[test]
-fn equality_f64_test() {
-    let a = random_float();
+fn equality_f32_test() {
+    let a = random_f32();
     let a_twofloat = TwoFloat::from(a);
     assert_eq!(
         a_twofloat, a,
-        "LHS equality check failed for f64 value {}",
+        "LHS equality check failed for f32 value {}",
         a
     );
     assert_eq!(
         a, a_twofloat,
-        "RHS equality check failed for f64 value {}",
+        "RHS equality check failed for f32 value {}",
         a
     );
 
@@ -118,17 +118,17 @@ fn greater_than_equal_test() {
 }
 
 #[test]
-fn compare_f64_test() {
+fn compare_f32_test() {
     repeated_test(|| {
-        let a = random_float();
+        let a = random_f32();
         let a_two = TwoFloat::from(a);
         assert!(
             a.partial_cmp(&a_two) == Some(Ordering::Equal),
-            "Comparison of f64 <=> TwoFloat failed"
+            "Comparison of f32 <=> TwoFloat failed"
         );
         assert!(
             a_two.partial_cmp(&a) == Some(Ordering::Equal),
-            "Comparison of TwoFloat <=> f64 failed"
+            "Comparison of TwoFloat <=> f32 failed"
         );
         assert!(a <= a_two);
         assert!(a_two <= a);
@@ -140,62 +140,62 @@ fn compare_f64_test() {
             if b < 0.0 {
                 assert!(
                     a.partial_cmp(&ab) == Some(Ordering::Greater),
-                    "Comparison of f64 <=> TwoFloat failed"
+                    "Comparison of f32 <=> TwoFloat failed"
                 );
-                assert!(a > ab, "Comparison of f64 > TwoFloat failed");
-                assert!(a >= ab, "Comparison of f64 >= TwoFloat failed");
+                assert!(a > ab, "Comparison of f32 > TwoFloat failed");
+                assert!(a >= ab, "Comparison of f32 >= TwoFloat failed");
 
                 assert!(
                     ab.partial_cmp(&a) == Some(Ordering::Less),
-                    "Comparison of TwoFloat <=> f64 failed"
+                    "Comparison of TwoFloat <=> f32 failed"
                 );
-                assert!(ab < a, "Comparison of TwoFloat < f64 failed");
-                assert!(ab <= a, "Comparison of TwoFloat <= f64 failed");
+                assert!(ab < a, "Comparison of TwoFloat < f32 failed");
+                assert!(ab <= a, "Comparison of TwoFloat <= f32 failed");
             } else if b > 0.0 {
                 assert!(
                     a.partial_cmp(&ab) == Some(Ordering::Less),
-                    "Comparison of f64 <=> TwoFloat failed"
+                    "Comparison of f32 <=> TwoFloat failed"
                 );
-                assert!(a < ab, "Comparison of f64 < TwoFloat failed");
-                assert!(a <= ab, "Comparison of f64 <= TwoFloat failed");
+                assert!(a < ab, "Comparison of f32 < TwoFloat failed");
+                assert!(a <= ab, "Comparison of f32 <= TwoFloat failed");
 
                 assert!(
                     ab.partial_cmp(&a) == Some(Ordering::Greater),
-                    "Comparison of TwoFloat <=> f64 failed"
+                    "Comparison of TwoFloat <=> f32 failed"
                 );
-                assert!(ab > a, "Comparison of TwoFloat > f64 failed");
-                assert!(ab >= a, "Comparison of TwoFloat >= f64 failed");
+                assert!(ab > a, "Comparison of TwoFloat > f32 failed");
+                assert!(ab >= a, "Comparison of TwoFloat >= f32 failed");
             }
 
-            let c = random_float();
+            let c = random_f32();
             if c < a {
                 assert!(
                     c.partial_cmp(&ab) == Some(Ordering::Less),
-                    "Comparison of f64 <=> TwoFloat failed"
+                    "Comparison of f32 <=> TwoFloat failed"
                 );
-                assert!(c < ab, "Comparison of f64 < TwoFloat failed");
-                assert!(c <= ab, "Comparison of f64 <= TwoFloat failed");
+                assert!(c < ab, "Comparison of f32 < TwoFloat failed");
+                assert!(c <= ab, "Comparison of f32 <= TwoFloat failed");
 
                 assert!(
                     ab.partial_cmp(&c) == Some(Ordering::Greater),
-                    "Comparison of TwoFloat <=> f64 failed"
+                    "Comparison of TwoFloat <=> f32 failed"
                 );
-                assert!(ab > c, "Comparison of TwoFloat > f64 failed");
-                assert!(ab >= c, "Comparison of TwoFloat >= f64 failed");
+                assert!(ab > c, "Comparison of TwoFloat > f32 failed");
+                assert!(ab >= c, "Comparison of TwoFloat >= f32 failed");
             } else if c > a {
                 assert!(
                     c.partial_cmp(&ab) == Some(Ordering::Greater),
-                    "Comparison of f64 <=> TwoFloat failed"
+                    "Comparison of f32 <=> TwoFloat failed"
                 );
-                assert!(c > ab, "Comparison of f64 > TwoFloat failed");
-                assert!(c >= ab, "Comparison of f64 >= TwoFloat failed");
+                assert!(c > ab, "Comparison of f32 > TwoFloat failed");
+                assert!(c >= ab, "Comparison of f32 >= TwoFloat failed");
 
                 assert!(
                     ab.partial_cmp(&c) == Some(Ordering::Less),
-                    "Comparison of TwoFloat <=> f64 failed"
+                    "Comparison of TwoFloat <=> f32 failed"
                 );
-                assert!(ab < c, "Comparison of TwoFloat < f64 failed");
-                assert!(ab <= c, "Comparison of TwoFloat <= f64 failed");
+                assert!(ab < c, "Comparison of TwoFloat < f32 failed");
+                assert!(ab <= c, "Comparison of TwoFloat <= f32 failed");
             }
         }
     })

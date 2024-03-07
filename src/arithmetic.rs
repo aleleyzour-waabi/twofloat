@@ -6,7 +6,7 @@ use core::ops::{
 
 use crate::{math_util::mathfn, TwoFloat};
 
-pub(crate) fn fast_two_sum(a: f64, b: f64) -> TwoFloat {
+pub(crate) fn fast_two_sum(a: f32, b: f32) -> TwoFloat {
     // Joldes et al. (2017) Algorithm 1
     let s = a + b;
     let z = s - a;
@@ -16,7 +16,7 @@ pub(crate) fn fast_two_sum(a: f64, b: f64) -> TwoFloat {
 impl TwoFloat {
     /// Creates a new `TwoFloat` by adding two `f64` values using Algorithm 2
     /// from Joldes et al. (2017).
-    pub fn new_add(a: f64, b: f64) -> Self {
+    pub fn new_add(a: f32, b: f32) -> Self {
         let s = a + b;
         let aa = s - b;
         let bb = s - aa;
@@ -28,7 +28,7 @@ impl TwoFloat {
     /// Creates a new `TwoFloat` by subtracting two `f64` values using
     /// Algorithm 2 from Joldes et al. (2017) modified for negative right-hand
     /// side.
-    pub fn new_sub(a: f64, b: f64) -> Self {
+    pub fn new_sub(a: f32, b: f32) -> Self {
         let s = a - b;
         let aa = s + b;
         let bb = s - aa;
@@ -39,18 +39,18 @@ impl TwoFloat {
 
     /// Creates a new `TwoFloat` by multiplying two `f64` values using
     /// Algorithm 3 from Joldes et al. (2017).
-    pub fn new_mul(a: f64, b: f64) -> Self {
+    pub fn new_mul(a: f32, b: f32) -> Self {
         let p = a * b;
         Self {
             hi: p,
-            lo: mathfn::fma(a, b, -p),
+            lo: mathfn::fmaf(a, b, -p),
         }
     }
 
     /// Creates a new `TwoFloat` by dividing two `f64` values using Algorithm
     /// 15 from Joldes et al. (2017) modified for the left-hand-side having a
     /// zero value in the low word.
-    pub fn new_div(a: f64, b: f64) -> Self {
+    pub fn new_div(a: f32, b: f32) -> Self {
         let th = a / b;
         let (ph, pl) = Self::new_mul(th, b).into();
         let dh = a - ph;
@@ -72,7 +72,7 @@ unary_ops! {
 binary_ops! {
     /// Implements addition of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 4.
-    fn Add::add<'a, 'b>(self: &'a TwoFloat, rhs: &'b f64) -> TwoFloat {
+    fn Add::add<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let (sh, sl) = TwoFloat::new_add(self.hi, *rhs).into();
         let v = self.lo + sl;
         fast_two_sum(sh, v)
@@ -80,7 +80,7 @@ binary_ops! {
 
     /// Implements addition of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 4.
-    fn Add::add<'a, 'b>(self: &'a f64, rhs: &'b TwoFloat) -> TwoFloat {
+    fn Add::add<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let (sh, sl) = TwoFloat::new_add(rhs.hi, *self).into();
         let v = rhs.lo + sl;
         fast_two_sum(sh, v)
@@ -99,7 +99,7 @@ binary_ops! {
 
     /// Implements subtraction of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 4 modified for negative right-hand side.
-    fn Sub::sub<'a, 'b>(self: &'a TwoFloat, rhs: &'b f64) -> TwoFloat {
+    fn Sub::sub<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let (sh, sl) = TwoFloat::new_sub(self.hi, *rhs).into();
         let v = self.lo + sl;
         fast_two_sum(sh, v)
@@ -107,7 +107,7 @@ binary_ops! {
 
     /// Implements subtraction of `f64` and `TwoFloat` using Joldes et al.
     /// (2017) Algorithm 4 modified for negative left-hand side.
-    fn Sub::sub<'a, 'b>(self: &'a f64, rhs: &'b TwoFloat) -> TwoFloat {
+    fn Sub::sub<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let (sh, sl) = TwoFloat::new_sub(*self, rhs.hi).into();
         let v = sl - rhs.lo;
         fast_two_sum(sh, v)
@@ -126,17 +126,17 @@ binary_ops! {
 
     /// Implements multiplication of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 9.
-    fn Mul::mul<'a, 'b>(self: &'a TwoFloat, rhs: &'b f64) -> TwoFloat {
+    fn Mul::mul<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, *rhs).into();
-        let cl3 = mathfn::fma(self.lo, *rhs, cl1);
+        let cl3 = mathfn::fmaf(self.lo, *rhs, cl1);
         fast_two_sum(ch, cl3)
     }
 
     /// Implements multiplication of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 9.
-    fn Mul::mul<'a, 'b>(self: &'a f64, rhs: &'b TwoFloat) -> TwoFloat {
+    fn Mul::mul<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(rhs.hi, *self).into();
-        let cl3 = mathfn::fma(rhs.lo, *self, cl1);
+        let cl3 = mathfn::fmaf(rhs.lo, *self, cl1);
         fast_two_sum(ch, cl3)
     }
 
@@ -145,15 +145,15 @@ binary_ops! {
     fn Mul::mul<'a, 'b>(self: &'a TwoFloat, rhs: &'b TwoFloat) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, rhs.hi).into();
         let tl0 = self.lo * rhs.lo;
-        let tl1 = mathfn::fma(self.hi, rhs.lo, tl0);
-        let cl2 = mathfn::fma(self.lo, rhs.hi, tl1);
+        let tl1 = mathfn::fmaf(self.hi, rhs.lo, tl0);
+        let cl2 = mathfn::fmaf(self.lo, rhs.hi, tl1);
         let cl3 = cl1 + cl2;
         fast_two_sum(ch, cl3)
     }
 
     /// Implements division of `TwoFloat` and `f64` using Joldes et al. (2017)
     /// Algorithm 15
-    fn Div::div<'a, 'b>(self: &'a TwoFloat, rhs: &'b f64) -> TwoFloat {
+    fn Div::div<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let th = self.hi / rhs;
         let (ph, pl) = TwoFloat::new_mul(th, *rhs).into();
         let dh = self.hi - ph;
@@ -166,7 +166,7 @@ binary_ops! {
     /// Implements division of `f64` and `TwoFloat` using Joldes et al. (2017)
     /// Algorithm 18 modified for the left-hand side having a zero value in
     /// the low word.
-    fn Div::div<'a, 'b>(self: &'a f64, rhs: &'b TwoFloat) -> TwoFloat {
+    fn Div::div<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let th = rhs.hi.recip();
         let rh = 1.0 - rhs.hi * th;
         let rl = -(rhs.lo * th);
@@ -175,7 +175,7 @@ binary_ops! {
         let d = e * th;
         let m = d + th;
         let (ch, cl1) = TwoFloat::new_mul(m.hi, *self).into();
-        let cl3 = mathfn::fma(m.lo, *self, cl1);
+        let cl3 = mathfn::fmaf(m.lo, *self, cl1);
         fast_two_sum(ch, cl3)
     }
 
@@ -192,12 +192,12 @@ binary_ops! {
         self * m
     }
 
-    fn Rem::rem<'a, 'b>(self: &'a TwoFloat, rhs: &'b f64) -> TwoFloat {
+    fn Rem::rem<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let quotient = (self / rhs).trunc();
         self - quotient * rhs
     }
 
-    fn Rem::rem<'a, 'b>(self: &'a f64, rhs: &'b TwoFloat) -> TwoFloat {
+    fn Rem::rem<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let quotient = (self / rhs).trunc();
         self - quotient * rhs
     }
@@ -213,7 +213,7 @@ binary_ops! {
 assign_ops! {
     /// Implements addition of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 4.
-    fn AddAssign::add_assign<'a>(self: &mut TwoFloat, rhs: &'a f64) {
+    fn AddAssign::add_assign<'a>(self: &mut TwoFloat, rhs: &'a f32) {
         let (sh, sl) = TwoFloat::new_add(self.hi, *rhs).into();
         let v = self.lo + sl;
         *self = fast_two_sum(sh, v);
@@ -232,7 +232,7 @@ assign_ops! {
 
     /// Implements subtraction of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 4 modified for negative right-hand side.
-    fn SubAssign::sub_assign<'a>(self: &mut TwoFloat, rhs: &'a f64) {
+    fn SubAssign::sub_assign<'a>(self: &mut TwoFloat, rhs: &'a f32) {
         let (sh, sl) = TwoFloat::new_sub(self.hi, *rhs).into();
         let v = self.lo + sl;
         *self = fast_two_sum(sh, v);
@@ -251,9 +251,9 @@ assign_ops! {
 
     /// Implements multiplication of `TwoFloat` and `f64` using Joldes et al.
     /// (2017) Algorithm 9.
-    fn MulAssign::mul_assign<'a>(self: &mut TwoFloat, rhs: &'a f64) {
+    fn MulAssign::mul_assign<'a>(self: &mut TwoFloat, rhs: &'a f32) {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, *rhs).into();
-        let cl3 = mathfn::fma(self.lo, *rhs, cl1);
+        let cl3 = mathfn::fmaf(self.lo, *rhs, cl1);
         *self = fast_two_sum(ch, cl3);
     }
 
@@ -262,15 +262,15 @@ assign_ops! {
     fn MulAssign::mul_assign<'a>(self: &mut TwoFloat, rhs: &'a TwoFloat) {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, rhs.hi).into();
         let tl0 = self.lo * rhs.lo;
-        let tl1 = mathfn::fma(self.hi, rhs.lo, tl0);
-        let cl2 = mathfn::fma(self.lo, rhs.hi, tl1);
+        let tl1 = mathfn::fmaf(self.hi, rhs.lo, tl0);
+        let cl2 = mathfn::fmaf(self.lo, rhs.hi, tl1);
         let cl3 = cl1 + cl2;
         *self = fast_two_sum(ch, cl3)
     }
 
     /// Implements division of `TwoFloat` and `f64` using Joldes et al. (2017)
     /// Algorithm 15
-    fn DivAssign::div_assign<'a>(self: &mut TwoFloat, rhs: &'a f64) {
+    fn DivAssign::div_assign<'a>(self: &mut TwoFloat, rhs: &'a f32) {
         let th = self.hi / rhs;
         let (ph, pl) = TwoFloat::new_mul(th, *rhs).into();
         let dh = self.hi - ph;
@@ -293,7 +293,7 @@ assign_ops! {
         *self *= m;
     }
 
-    fn RemAssign::rem_assign<'b>(self: &mut TwoFloat, rhs: &'b f64) {
+    fn RemAssign::rem_assign<'b>(self: &mut TwoFloat, rhs: &'b f32) {
         let quotient = (*self / rhs).trunc();
         *self -= quotient * rhs;
     }

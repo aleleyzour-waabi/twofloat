@@ -98,8 +98,8 @@ mod serde_helper {
     #[derive(serde::Deserialize)]
     #[serde(rename = "TwoFloat")]
     pub(super) struct TwoFloatDeserializeHelper {
-        hi: f64,
-        lo: f64,
+        hi: f32,
+        lo: f32,
     }
 
     impl core::convert::TryFrom<TwoFloatDeserializeHelper> for TwoFloat {
@@ -120,8 +120,8 @@ mod serde_helper {
     serde(try_from = "serde_helper::TwoFloatDeserializeHelper")
 )]
 pub struct TwoFloat {
-    pub(crate) hi: f64,
-    pub(crate) lo: f64,
+    pub(crate) hi: f32,
+    pub(crate) lo: f32,
 }
 
 /// The error type for `TwoFloat` operations.

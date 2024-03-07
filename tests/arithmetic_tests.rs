@@ -9,9 +9,9 @@ use twofloat::{no_overlap, TwoFloat};
 #[macro_use]
 pub mod common;
 
-use common::{get_twofloat, get_valid_pair, get_valid_twofloat, random_float, repeated_test};
+use common::{get_twofloat, get_valid_pair, get_valid_twofloat, random_f32, repeated_test};
 
-// Tests for construction from two f64 values
+// Tests for construction from two f32 values
 
 #[test]
 fn new_add_test() {
@@ -181,15 +181,15 @@ impl Operator {
     }
 }
 
-fn diff_test<L, R>(op: &Operator, expected: f64, result: TwoFloat, lhs: L, rhs: R)
+fn diff_test<L, R>(op: &Operator, expected: f32, result: TwoFloat, lhs: L, rhs: R)
 where
     L: Debug,
     R: Debug,
 {
     match op {
         Operator::Rem => {
-            let true_difference: f64 = ((expected - result) / expected).into();
-            let differences: [f64; 3] = [
+            let true_difference: f32 = ((expected - result) / expected).into();
+            let differences: [f32; 3] = [
                 true_difference.abs(),
                 (1.0 - true_difference).abs(),
                 (1.0 + true_difference).abs(),
@@ -219,9 +219,9 @@ where
     }
 }
 
-// Tests for binary operators for TwoFloat and f64
+// Tests for binary operators for TwoFloat and f32
 
-fn f64_twofloat_left(op: Operator) {
+fn f32_twofloat_left(op: Operator) {
     let mut rng = rand::thread_rng();
     let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
@@ -255,7 +255,7 @@ fn f64_twofloat_left(op: Operator) {
     });
 }
 
-fn f64_twofloat_right(op: Operator) {
+fn f32_twofloat_right(op: Operator) {
     let mut rng = rand::thread_rng();
     let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
@@ -289,7 +289,7 @@ fn f64_twofloat_right(op: Operator) {
     });
 }
 
-fn f64_twofloat_reversible(op: Operator) {
+fn f32_twofloat_reversible(op: Operator) {
     if !matches!(op, Operator::Add | Operator::Mul) {
         return;
     }
@@ -334,22 +334,22 @@ fn f64_twofloat_reversible(op: Operator) {
     });
 }
 
-fn f64_twofloat_assign(op: Operator) {
+fn f32_twofloat_assign(op: Operator) {
     repeated_test(|| {
-        let c = random_float();
+        let c = random_f32();
         let value = get_valid_twofloat(|x, y| op.apply(x + y, c).is_finite());
         let result1 = op.apply(value, c);
         if result1.is_valid() {
             let result2 = op.apply(&value, c);
             assert!(
                 result2.is_valid(),
-                "Result validity mismatch between TwoFloat {0} f64 and &TwoFloat {0} f64",
+                "Result validity mismatch between TwoFloat {0} f32 and &TwoFloat {0} f32",
                 op.symbol()
             );
             assert_eq!(
                 result1,
                 result2,
-                "Mismatch between TwoFloat {0} f64 and &TwoFloat {0} f64",
+                "Mismatch between TwoFloat {0} f32 and &TwoFloat {0} f32",
                 op.symbol()
             );
 
@@ -357,14 +357,14 @@ fn f64_twofloat_assign(op: Operator) {
             op.apply_assign(&mut result3, c);
             assert!(
                 result3.is_valid(),
-                "Result validity mismatch between TwoFloat {} f64 and TwoFloat {} f64",
+                "Result validity mismatch between TwoFloat {} f32 and TwoFloat {} f32",
                 op.symbol(),
                 op.symbol_assign()
             );
             assert_eq!(
                 result1,
                 result3,
-                "Mismatch between TwoFloat {} f64 and TwoFloat {} f64",
+                "Mismatch between TwoFloat {} f32 and TwoFloat {} f32",
                 op.symbol(),
                 op.symbol_assign()
             );
@@ -449,23 +449,23 @@ macro_rules! op_test {
             use super::Operator;
 
             #[test]
-            fn f64_twofloat_left() {
-                super::f64_twofloat_left($op);
+            fn f32_twofloat_left() {
+                super::f32_twofloat_left($op);
             }
 
             #[test]
-            fn f64_twofloat_right() {
-                super::f64_twofloat_right($op);
+            fn f32_twofloat_right() {
+                super::f32_twofloat_right($op);
             }
 
             #[test]
-            fn f64_twofloat_reversible() {
-                super::f64_twofloat_reversible($op);
+            fn f32_twofloat_reversible() {
+                super::f32_twofloat_reversible($op);
             }
 
             #[test]
-            fn f64_twofloat_assign() {
-                super::f64_twofloat_assign($op);
+            fn f32_twofloat_assign() {
+                super::f32_twofloat_assign($op);
             }
 
             #[test]

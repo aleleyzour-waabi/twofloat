@@ -4,11 +4,11 @@
 pub mod common;
 
 use common::*;
-use hexf::hexf64;
+use hexf::hexf32;
 use rand::Rng;
 use twofloat::TwoFloat;
 
-const EXP_UPPER_LIMIT: f64 = hexf64!("0x1.62e42fefa39efp9"); // ln(0x1.0p1024)
+const EXP_UPPER_LIMIT: f32 = hexf32!("0x1.62e430p9"); // ln(0x1.0p1024)
 
 #[test]
 fn exp_test() {
@@ -39,7 +39,7 @@ fn exp_test() {
 #[test]
 fn exp_m1_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::<f64>::new(-10.0, 10.0);
+    let src_dist = rand::distributions::Uniform::<f32>::new(-10.0, 10.0);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);
@@ -65,7 +65,7 @@ fn exp_m1_test() {
 #[test]
 fn ln_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::new(f64::from_bits(1u64), f64::MAX);
+    let src_dist = rand::distributions::Uniform::new(f32::from_bits(1u32), f32::MAX);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);
@@ -100,7 +100,7 @@ fn ln_negative_test() {
 #[test]
 fn ln_1p_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::new(-1.0 + f64::EPSILON, f64::MAX);
+    let src_dist = rand::distributions::Uniform::new(-1.0 + f32::EPSILON, f32::MAX);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);

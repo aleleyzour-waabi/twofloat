@@ -2,11 +2,11 @@ use rand::Rng;
 
 const TEST_ITERS: usize = 100000;
 
-pub fn random_float() -> f64 {
+pub fn random_f32() -> f32 {
     let mut engine = rand::thread_rng();
-    let mantissa_dist = rand::distributions::Uniform::new(0, 1u64 << 52);
-    let exponent_dist = rand::distributions::Uniform::new(0, 2047u64);
-    let x = f64::from_bits(engine.sample(mantissa_dist) | (engine.sample(exponent_dist) << 52));
+    let mantissa_dist = rand::distributions::Uniform::new(0, 1u32 << 23);
+    let exponent_dist = rand::distributions::Uniform::new(0, (1u32 << 8)-1);
+    let x = f32::from_bits(engine.sample(mantissa_dist) | (engine.sample(exponent_dist) << 23));
     if engine.gen() {
         x
     } else {
@@ -23,10 +23,10 @@ where
     }
 }
 
-pub fn get_valid_pair<F: Fn(f64, f64) -> bool>(pred: F) -> (f64, f64) {
+pub fn get_valid_pair<F: Fn(f32, f32) -> bool>(pred: F) -> (f32, f32) {
     loop {
-        let a = random_float();
-        let b = random_float();
+        let a = random_f32();
+        let b = random_f32();
         if pred(a, b) {
             return (a, b);
         }

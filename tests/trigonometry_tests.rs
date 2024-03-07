@@ -16,7 +16,7 @@ fn sin_cos_test() {
     repeated_test(|| {
         let source = loop {
             let a = rng.sample(dist);
-            let b = random_float();
+            let b = random_f32();
             if let Ok(result) = TwoFloat::try_from((a, b)) {
                 break result;
             }
@@ -61,8 +61,8 @@ fn sin_cos_test() {
 fn sin_asin_test() {
     let mut rng = rand::thread_rng();
     let dist = rand::distributions::Uniform::new_inclusive(
-        -core::f64::consts::FRAC_PI_2,
-        core::f64::consts::FRAC_PI_2,
+        -core::f32::consts::FRAC_PI_2,
+        core::f32::consts::FRAC_PI_2,
     );
     repeated_test(|| {
         let source = TwoFloat::from(rng.sample(dist));
@@ -84,7 +84,7 @@ fn sin_asin_test() {
 #[test]
 fn cos_acos_test() {
     let mut rng = rand::thread_rng();
-    let dist = rand::distributions::Uniform::new_inclusive(0.0, core::f64::consts::PI);
+    let dist = rand::distributions::Uniform::new_inclusive(0.0, core::f32::consts::PI);
     repeated_test(|| {
         let source = TwoFloat::from(rng.sample(dist));
         let result = source.cos().acos();
@@ -106,8 +106,8 @@ fn cos_acos_test() {
 fn tan_atan_test() {
     let mut rng = rand::thread_rng();
     let dist = rand::distributions::Uniform::new_inclusive(
-        -core::f64::consts::FRAC_PI_2,
-        core::f64::consts::FRAC_PI_2,
+        -core::f32::consts::FRAC_PI_2,
+        core::f32::consts::FRAC_PI_2,
     );
     repeated_test(|| {
         let source = TwoFloat::from(rng.sample(dist));
@@ -130,7 +130,7 @@ fn tan_atan_test() {
 fn sin_cos_atan2_test() {
     let mut rng = rand::thread_rng();
     let dist =
-        rand::distributions::Uniform::new_inclusive(-core::f64::consts::PI, core::f64::consts::PI);
+        rand::distributions::Uniform::new_inclusive(-core::f32::consts::PI, core::f32::consts::PI);
     repeated_test(|| {
         let source = TwoFloat::from(rng.sample(dist));
         let (s, c) = source.sin_cos();

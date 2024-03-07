@@ -1,180 +1,185 @@
-use hexf::hexf64;
+use hexf::hexf32;
 
 use crate::{consts::LN_2, TwoFloat};
 
 // 1/ln(2)
 const FRAC_1_LN_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.71547652b82fep0"),
-    lo: hexf64!("0x1.777d0ffda0d24p-56"),
+    hi: hexf32!("0x1.715476p0"),
+    lo: hexf32!("0x1.777d10p-56"),
 };
 
 // ln(10)
 const LN_10: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.26bb1bbb55516p1"),
-    lo: hexf64!("-0x1.f48ad494ea3e9p-53"),
+    hi: hexf32!("0x1.26bb1cp1"),
+    lo: hexf32!("-0x1.f48ad4p-53"),
 };
 
 // ln(3/2)
 const LN_FRAC_3_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.9f323ecbf984cp-2"),
-    lo: hexf64!("-0x1.a92e513217f5cp-59"),
+    hi: hexf32!("0x1.9f323ep-2"),
+    lo: hexf32!("-0x1.a92e52p-59"),
 };
 
 // limits
-const EXP_UPPER_LIMIT: f64 = hexf64!("0x1.62e42fefa39efp9"); // ln(0x1.0p1024)
-const EXP_LOWER_LIMIT: f64 = hexf64!("-0x1.74385446d71c3p9"); // ln(0x1.0p-1074)
+const EXP_UPPER_LIMIT: f32 = hexf32!("0x1.62e430p9"); // ln(0x1.0p1024)
+const EXP_LOWER_LIMIT: f32 = hexf32!("-0x1.743854p9"); // ln(0x1.0p-1074)
 
 // Coefficients for polynomial approximation of x*(exp(x)+1)/(exp(x)-1)
 const EXP_COEFFS: [TwoFloat; 6] = [
     TwoFloat {
-        hi: hexf64!("0x1.5555555555555p-3"),
-        lo: hexf64!("0x1.32460411c87c6p-57"),
+        hi: hexf32!("0x1.555556p-3"),
+        lo: hexf32!("0x1.324604p-57"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.6c16c16c16af3p-9"),
-        lo: hexf64!("0x1.136a2c950fda6p-63"),
+        hi: hexf32!("-0x1.6c16c2p-9"),
+        lo: hexf32!("0x1.136a2cp-63"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.1566abbf9f4f6p-14"),
-        lo: hexf64!("0x1.1110477bd284cp-68"),
+        hi: hexf32!("0x1.1566acp-14"),
+        lo: hexf32!("0x1.111048p-68"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.bbd7768cb5288p-20"),
-        lo: hexf64!("0x1.fece87c086974p-76"),
+        hi: hexf32!("-0x1.bbd776p-20"),
+        lo: hexf32!("0x1.fece88p-76"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.66a4e5c4c23f6p-25"),
-        lo: hexf64!("-0x1.c8771e6260e4bp-79"),
+        hi: hexf32!("0x1.66a4e6p-25"),
+        lo: hexf32!("-0x1.c8771ep-79"),
     },
     TwoFloat {
-        hi: hexf64!("-0x1.1f6dc1f8a9983p-30"),
-        lo: hexf64!("-0x1.d03ec3b33eaf5p-84"),
+        hi: hexf32!("-0x1.1f6dc2p-30"),
+        lo: hexf32!("-0x1.d03ec4p-84"),
     },
 ];
 
 const EXP_M1_COEFFS: [TwoFloat; 12] = [
     TwoFloat {
-        hi: hexf64!("0x1.0p-1"),
-        lo: hexf64!("0x1.bd730351a9755p-56"),
+        hi: hexf32!("0x1.0p-1"),
+        lo: hexf32!("0x1.bd7304p-56"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.5555555555553p-3"),
-        lo: hexf64!("-0x1.7597a71b9af89p-57"),
+        hi: hexf32!("0x1.555556p-3"),
+        lo: hexf32!("-0x1.7597a8p-57"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.55555555553f5p-5"),
-        lo: hexf64!("-0x1.ccd976a7f775cp-59"),
+        hi: hexf32!("0x1.555556p-5"),
+        lo: hexf32!("-0x1.ccd976p-59"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.11111111115c4p-7"),
-        lo: hexf64!("0x1.342b20ac16f97p-61"),
+        hi: hexf32!("0x1.111112p-7"),
+        lo: hexf32!("0x1.342b20p-61"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.6c16c16c6709ep-10"),
-        lo: hexf64!("-0x1.3ce71843eff0cp-64"),
+        hi: hexf32!("0x1.6c16c2p-10"),
+        lo: hexf32!("-0x1.3ce718p-64"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.a01a01a0b696cp-13"),
-        lo: hexf64!("0x1.d41bdeddcef57p-71"),
+        hi: hexf32!("0x1.a01a02p-13"),
+        lo: hexf32!("0x1.d41bdep-71"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.a01a00aeb2858p-16"),
-        lo: hexf64!("0x1.7b3bc0a8a9fafp-70"),
+        hi: hexf32!("0x1.a01a00p-16"),
+        lo: hexf32!("0x1.7b3bc0p-70"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.71de32b050a9dp-19"),
-        lo: hexf64!("-0x1.9be0c6cec6271p-77"),
+        hi: hexf32!("0x1.71de32p-19"),
+        lo: hexf32!("-0x1.9be0c6p-77"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.27e62dc06cd67p-22"),
-        lo: hexf64!("-0x1.41f2a2a0cba43p-77"),
+        hi: hexf32!("0x1.27e62ep-22"),
+        lo: hexf32!("-0x1.41f2a2p-77"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.ae852d1420eefp-26"),
-        lo: hexf64!("-0x1.669f123719ab2p-81"),
+        hi: hexf32!("0x1.ae852ep-26"),
+        lo: hexf32!("-0x1.669f12p-81"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.1e22aadda1973p-29"),
-        lo: hexf64!("-0x1.83b25ef3d0968p-85"),
+        hi: hexf32!("0x1.1e22aap-29"),
+        lo: hexf32!("-0x1.83b25ep-85"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.36ab6f77c95d8p-33"),
-        lo: hexf64!("0x1.c16dc2dc455f1p-89"),
+        hi: hexf32!("0x1.36ab70p-33"),
+        lo: hexf32!("0x1.c16dc2p-89"),
     },
 ];
 
 // Coefficients for polynomial approximation of 2^x on [-0.5, 0.5]
 const EXP2_COEFFS: [TwoFloat; 14] = [
     TwoFloat {
-        hi: hexf64!("0x1.62e42fefa39efp-1"),
-        lo: hexf64!("0x1.abcab7ae0b156p-56"),
+        hi: hexf32!("0x1.62e430p-1"),
+        lo: hexf32!("0x1.abcab8p-56"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.ebfbdff82c58fp-3"),
-        lo: hexf64!("-0x1.5e431ae1ed823p-57"),
+        hi: hexf32!("0x1.ebfbe0p-3"),
+        lo: hexf32!("-0x1.5e431ap-57"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.c6b08d704a0cp-5"),
-        lo: hexf64!("-0x1.d70e953766cd4p-59"),
+        hi: hexf32!("0x1.c6b08ep-5"),
+        lo: hexf32!("-0x1.d70e96p-59"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.3b2ab6fba4e77p-7"),
-        lo: hexf64!("0x1.494f1fd2611efp-62"),
+        hi: hexf32!("0x1.3b2ab6p-7"),
+        lo: hexf32!("0x1.494f20p-62"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.5d87fe78a6736p-10"),
-        lo: hexf64!("0x1.1f321edc1a3bbp-64"),
+        hi: hexf32!("0x1.5d87fep-10"),
+        lo: hexf32!("0x1.1f321ep-64"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.430912f86c78cp-13"),
-        lo: hexf64!("0x1.bfc77bb3c115bp-70"),
+        hi: hexf32!("0x1.430912p-13"),
+        lo: hexf32!("0x1.bfc77cp-70"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.ffcbfc5887f1ap-17"),
-        lo: hexf64!("-0x1.3d15db905a7ddp-71"),
+        hi: hexf32!("0x1.ffcbfcp-17"),
+        lo: hexf32!("-0x1.3d15dcp-71"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.62c0223a5a6dbp-20"),
-        lo: hexf64!("0x1.f538d80a3aae8p-75"),
+        hi: hexf32!("0x1.62c022p-20"),
+        lo: hexf32!("0x1.f538d8p-75"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.b5253d488bccap-24"),
-        lo: hexf64!("-0x1.2ec9fd0f44ecfp-80"),
+        hi: hexf32!("0x1.b5253ep-24"),
+        lo: hexf32!("-0x1.2ec9fep-80"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.e4cf5169221d1p-28"),
-        lo: hexf64!("-0x1.cc6cb479cd318p-83"),
+        hi: hexf32!("0x1.e4cf52p-28"),
+        lo: hexf32!("-0x1.cc6cb4p-83"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.e8ca77bf9238ep-32"),
-        lo: hexf64!("0x1.c257a7e383648p-86"),
+        hi: hexf32!("0x1.e8ca78p-32"),
+        lo: hexf32!("0x1.c257a8p-86"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.c3bd1cd9ae17dp-36"),
-        lo: hexf64!("-0x1.45f6fa8d3cb45p-91"),
+        hi: hexf32!("0x1.c3bd1cp-36"),
+        lo: hexf32!("-0x1.45f6fap-91"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.8235651fc7049p-40"),
-        lo: hexf64!("0x1.98bc0cb4f5bc4p-94"),
+        hi: hexf32!("0x1.823566p-40"),
+        lo: hexf32!("0x1.98bc0cp-94"),
     },
     TwoFloat {
-        hi: hexf64!("0x1.31efcab273719p-44"),
-        lo: hexf64!("0x1.c814aa232482ap-98"),
+        hi: hexf32!("0x1.31efcap-44"),
+        lo: hexf32!("0x1.c814aap-98"),
     },
 ];
 
-fn mul_pow2(mut x: f64, mut y: i32) -> f64 {
+fn mul_pow2(mut x: f32, mut y: i32) -> f32 {
+    //const EXP_LEN=8;
+    //const FRAC_LEN=23;
     loop {
-        if y < -1074 {
-            x *= hexf64!("0x1.0p-1074");
-            y += 1074;
-        } else if y < -1022 {
-            return x * f64::from_bits(1u64 << (y + 1074));
-        } else if y < 1024 {
-            return x * f64::from_bits(((y + 1023) as u64) << 52);
+        // (2^(EXP_LEN -1 /*sign*/)) + (FRAC_LEN -1) = 127 + 22= 149
+        if y < -149 {
+            x *= hexf32!("0x1p-149");
+            y += 149;
+            // (2^(EXP_LEN -1) -1  + FRAC_LEN -1 = -126
+        } else if y < -128 {
+            return x * f32::from_bits(1u32 << (y + 149));
+            // (2^EXP_LEN -1) = -128
+        } else if y < 128 {
+            return x * f32::from_bits(((y + 127) as u32) << 23);
         } else {
-            x *= hexf64!("0x1.0p1023");
-            y -= 1023;
+            x *= hexf32!("0x1.0p127");
+            y -= 127;
         }
     }
 }
@@ -197,7 +202,7 @@ impl TwoFloat {
             Self::from(0.0)
         } else if self.hi >= EXP_UPPER_LIMIT {
             Self {
-                hi: f64::INFINITY,
+                hi: f32::INFINITY,
                 lo: 0.0,
             }
         } else if self.hi == 0.0 {
@@ -276,8 +281,8 @@ impl TwoFloat {
             Self::from(0.0)
         } else if self >= 1023.0 {
             Self {
-                hi: f64::INFINITY,
-                lo: f64::INFINITY,
+                hi: f32::INFINITY,
+                lo: f32::INFINITY,
             }
         } else {
             let k = self.hi.round();

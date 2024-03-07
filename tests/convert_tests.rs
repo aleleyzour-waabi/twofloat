@@ -12,20 +12,20 @@ pub mod common;
 
 use common::*;
 
-fn right_bit(f: f64) -> Option<i16> {
+fn right_bit(f: f32) -> Option<i16> {
     let fbits = f.to_bits();
-    let exponent = ((fbits >> 52) & 0x7ff) as i16 - 1023;
+    let exponent = ((fbits >> 23) & ((1<<8)-1)) as i16 - ((1<<7)-1);
     match exponent {
-        -1023 => {
-            let mantissa = fbits & ((1 << 52) - 1);
+        -127 => {
+            let mantissa = fbits & ((1 << 23) - 1);
             if mantissa == 0 {
                 Some(i16::MIN)
             } else {
-                Some(-1074)
+                Some((1<<8) -1 + 23 -1)
             }
         }
-        1024 => None,
-        _ => Some(exponent - 52),
+        128 => None,
+        _ => Some(exponent - 23),
     }
 }
 
@@ -103,7 +103,7 @@ where
 {
     repeated_test(|| {
         let source = loop {
-            let source = F::from(random_float()).unwrap();
+            let source = F::from(random_f32()).unwrap();
             if source.is_finite() {
                 break source;
             };
@@ -113,7 +113,7 @@ where
 
         assert_eq!(
             result.hi(),
-            source.to_f64().unwrap(),
+            source.to_f32().unwrap(),
             "Float conversion failed: mismatch in high word"
         );
         assert_eq!(
@@ -134,7 +134,7 @@ where
         let result: F = source.into();
         assert_eq!(
             result,
-            F::from_f64(source.hi()).unwrap(),
+            F::from_f32(source.hi()).unwrap(),
             "Float conversion from TwoFloat failed"
         );
     });
@@ -199,18 +199,22 @@ trait ConvertBounds:
     + Debug
     + SampleUniform
 {
-    fn lower_bound() -> f64 {
-        Self::min_value().to_f64().unwrap() - 1.0
+    fn lower_bound() -> f32 {
+        Self::min_value().to_f32().unwrap() - 1.0
     }
 
-    fn upper_bound() -> f64 {
-        Self::max_value().to_f64().unwrap() + 1.0
+    fn upper_bound() -> f32 {
+        Self::max_value().to_f32().unwrap() + 1.0
     }
 }
 
 impl ConvertBounds for i8 {}
 impl ConvertBounds for i16 {}
-impl ConvertBounds for i32 {}
+impl ConvertBounds for i32 {
+    fn upper_bound() -> f32 {
+        i64::MAX as f32
+    }
+}
 
 impl ConvertBounds for i64 {
     fn upper_bound() -> f64 {
@@ -228,6 +232,11 @@ impl ConvertBounds for u8 {}
 impl ConvertBounds for u16 {}
 impl ConvertBounds for u32 {}
 
+impl ConvertBounds for u32 {
+    fn upper_bound() -> f32 {
+        u64::MAX as f32
+    }
+}
 impl ConvertBounds for u64 {
     fn upper_bound() -> f64 {
         u64::MAX as f64
@@ -292,14 +301,14 @@ where
 {
     let mut rng = rand::thread_rng();
     let valid_dist = rand::distributions::Uniform::new(
-        f64::from_bits(T::lower_bound().to_bits() - 1),
+        f32::from_bits(T::lower_bound().to_bits() - 1),
         T::upper_bound(),
     );
 
     repeated_test_enumerate(|i| {
         let (a, b, source) = loop {
             let a = rng.sample(valid_dist).trunc();
-            let b = if i == 0 { 0.0 } else { random_float() };
+            let b = if i == 0 { 0.0 } else { random_f32() };
             if let Ok(source) = TwoFloat::try_from((a, b)) {
                 break (a, b, source);
             }
@@ -324,7 +333,7 @@ where
 {
     let mut rng = rand::thread_rng();
     let valid_dist = rand::distributions::Uniform::new(
-        f64::from_bits(T::lower_bound().to_bits() - 1),
+        f32::from_bits(T::lower_bound().to_bits() - 1),
         T::upper_bound(),
     );
 
@@ -334,7 +343,7 @@ where
             if a.fract() == 0.0 {
                 continue;
             }
-            let b = if i == 0 { 0.0 } else { random_float() };
+            let b = if i == 0 { 0.0 } else { random_f32() };
             if let Ok(source) = TwoFloat::try_from((a, b)) {
                 break (a, source);
             }
@@ -373,7 +382,7 @@ where
         assert!(result.is_valid(), "Conversion of {:?} was invalid", source);
         assert_eq!(
             result.hi(),
-            source.to_f64().unwrap(),
+            source.to_f32().unwrap(),
             "Conversion of {:?} failed: mismatch in high word",
             source
         );
@@ -453,19 +462,30 @@ int_test! {
 
 // Helper functions for tests of 64- and 128-bit integer conversions
 
-fn random_mantissa() -> u64 {
+fn random_frac32() -> u32 {
+    const MANTISSA_RANGE: u64 = 1 << 23;
+    rand::thread_rng().gen_range(0..MANTISSA_RANGE)
+}
+
+fn random_frac64() -> u64 {
     const MANTISSA_RANGE: u64 = 1 << 52;
     rand::thread_rng().gen_range(0..MANTISSA_RANGE)
 }
 
-fn random_positive_float_exp_range(exp_range: Range<u64>) -> f64 {
+fn random_positive_float_exp_range32(exp_range: Range<u64>) -> f32 {
     let mut rng = rand::thread_rng();
 
-    f64::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 52) | random_mantissa())
+    f32::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 23) | random_frac32())
 }
 
-fn random_float_exp_range(exp_range: Range<u64>) -> f64 {
-    let x = random_positive_float_exp_range(exp_range);
+fn random_positive_float_exp_range64(exp_range: Range<u64>) -> f64 {
+    let mut rng = rand::thread_rng();
+
+    f32::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 52) | random_frac64())
+}
+
+fn random_f32_exp_range(exp_range: Range<u64>) -> f32 {
+    let x = random_positive_float_exp_range32(exp_range);
     if rand::thread_rng().gen() {
         x
     } else {
@@ -474,6 +494,34 @@ fn random_float_exp_range(exp_range: Range<u64>) -> f64 {
 }
 
 // Tests for conversions of 64-bit integers
+
+fn from_twofloat_lower_bound32<T>()
+where
+    T: ConvertBounds,
+{
+    repeated_test(|| {
+        let source = loop {
+            if let Ok(result) = try_get_twofloat_with_hi(T::lower_bound()) {
+                break result;
+            }
+        };
+        let expected = if source.hi() < T::min_value().to_f32().unwrap() {
+            if source.lo() > 0.0 {
+                Ok(T::min_value())
+            } else {
+                Err(TwoFloatError::ConversionError {})
+            }
+        } else if source.lo() > -1.0 {
+            Ok(T::min_value() + T::from(source.lo().ceil()).unwrap())
+        } else {
+            Err(TwoFloatError::ConversionError {})
+        };
+
+        let result = T::try_from(source);
+        check_try_from_result(&expected, &result, source);
+    });
+}
+
 
 fn from_twofloat_lower_bound64<T>()
 where
@@ -493,6 +541,28 @@ where
             }
         } else if source.lo() > -1.0 {
             Ok(T::min_value() + T::from(source.lo().ceil()).unwrap())
+        } else {
+            Err(TwoFloatError::ConversionError {})
+        };
+
+        let result = T::try_from(source);
+        check_try_from_result(&expected, &result, source);
+    });
+}
+
+
+fn from_twofloat_upper_bound32<T>()
+where
+    T: ConvertBounds,
+{
+    repeated_test(|| {
+        let source = loop {
+            if let Ok(result) = try_get_twofloat_with_hi(T::upper_bound()) {
+                break result;
+            }
+        };
+        let expected = if source.lo() < 0.0 {
+            Ok(T::max_value() - T::from(-source.lo().floor()).unwrap() + one())
         } else {
             Err(TwoFloatError::ConversionError {})
         };
@@ -523,30 +593,30 @@ where
     });
 }
 
-fn from_twofloat_high_fract64<T>()
+fn from_twofloat_high_fract32<T>()
 where
     T: ConvertBounds,
 {
     let mut rng = rand::thread_rng();
 
-    let mut gen_f64 = if T::min_value() == zero() {
+    let mut gen_f32 = if T::min_value() == zero() {
         || random_positive_float_exp_range(53..1075)
     } else {
-        || random_float_exp_range(53..1075)
+        || random_f32_exp_range(53..1075)
     };
 
     repeated_test(|| {
         let (a, b) = loop {
-            let a = get_valid_f64_gen(&mut gen_f64, |x| {
+            let a = get_valid_f32_gen(&mut gen_f32, |x| {
                 x > T::lower_bound() && x < T::upper_bound() && x.fract() != 0.0
             });
             let rb = right_bit(a).unwrap_or(i16::MIN);
             if rb < -1019 {
                 continue;
             }
-            let b_exponent = (rng.gen_range(-1022..rb) + 1023) as u64;
+            let b_exponent = (rng.gen_range(-1022..rb) + 1023) as u32;
             let b_mantissa = random_mantissa();
-            let b = f64::from_bits(b_mantissa | (b_exponent << 52));
+            let b = f32::from_bits(b_mantissa | (b_exponent << 23));
             if no_overlap(a, b) {
                 break if rng.gen() { (a, b) } else { (a, -b) };
             }
@@ -560,23 +630,60 @@ where
     });
 }
 
-fn from_twofloat_split_fract64<T>()
+fn from_twofloat_high_fract64<T>()
 where
     T: ConvertBounds,
 {
     let mut rng = rand::thread_rng();
 
-    let mut gen_f64 = if T::min_value() == zero() {
+    let mut gen_f32 = if T::min_value() == zero() {
+        || random_positive_float_exp_range(53..1075)
+    } else {
+        || random_f32_exp_range(53..1075)
+    };
+
+    repeated_test(|| {
+        let (a, b) = loop {
+            let a = get_valid_f64_gen(&mut gen_f32, |x| {
+                x > T::lower_bound() && x < T::upper_bound() && x.fract() != 0.0
+            });
+            let rb = right_bit(a).unwrap_or(i16::MIN);
+            if rb < -1019 {
+                continue;
+            }
+            let b_exponent = (rng.gen_range(-1022..rb) + 1023) as u32;
+            let b_mantissa = random_frac64();
+            let b = f32::from_bits(b_mantissa | (b_exponent << 23));
+            if no_overlap(a, b) {
+                break if rng.gen() { (a, b) } else { (a, -b) };
+            }
+        };
+
+        let source = TwoFloat::try_from((a, b)).unwrap();
+        let expected = Ok(T::from(a).unwrap());
+
+        let result = T::try_from(source);
+        check_try_from_result(&expected, &result, source);
+    });
+}
+
+fn from_twofloat_split_fract32<T>()
+where
+    T: ConvertBounds,
+{
+    let mut rng = rand::thread_rng();
+
+    let mut gen_f32 = if T::min_value() == zero() {
         || random_positive_float_exp_range(1023..1087)
     } else {
-        || random_float_exp_range(1023..1087)
+        || random_f32_exp_range(1023..1087)
     };
 
     let fract_dist =
-        rand::distributions::Uniform::new(f64::from_bits((-1.0f64).to_bits() - 1), 1.0);
+        rand::distributions::Uniform::new(f32::from_bits((-1.0f32).to_bits() - 1), 1.0);
     repeated_test_enumerate(|i| {
         let (a, b) = loop {
-            let a = get_valid_f64_gen(&mut gen_f64, |x| {
+            let a = get_valid_f32_gen(&mut gen_f32, |x| {
                 x > T::lower_bound() && x < T::upper_bound()
             })
             .trunc();
@@ -603,13 +710,13 @@ where
     });
 }
 
-fn from_twofloat_large64<T>()
+fn from_twofloat_large32<T>()
 where
     T: ConvertBounds,
 {
     let mut rng = rand::thread_rng();
     let valid_dist = rand::distributions::Uniform::new(
-        f64::from_bits(T::lower_bound().to_bits() - 1),
+        f32::from_bits(T::lower_bound().to_bits() - 1),
         T::upper_bound(),
     );
     repeated_test(|| {
@@ -621,7 +728,7 @@ where
             }
         };
         let b = loop {
-            let b = rng.gen_range(1.0..(1 << rb) as f64);
+            let b = rng.gen_range(1.0..(1 << rb) as f32);
             if no_overlap(a, b) {
                 if rng.gen() {
                     break b;
@@ -649,6 +756,23 @@ where
     });
 }
 
+fn from_twofloat_out_of_range32<T>()
+where
+    T: ConvertBounds,
+{
+    repeated_test(|| {
+        let source = get_valid_twofloat(|x, _| !(T::lower_bound()..=T::upper_bound()).contains(&x));
+
+        let result = T::try_from(source);
+
+        assert!(
+            result.is_err(),
+            "Conversion of {:?} produced value instead of error",
+            source
+        );
+    })
+}
+
 fn from_twofloat_out_of_range64<T>()
 where
     T: ConvertBounds,
@@ -666,7 +790,7 @@ where
     })
 }
 
-fn to_twofloat64<T>()
+fn to_twofloat32<T>()
 where
     T: ConvertBounds,
 {
@@ -678,8 +802,8 @@ where
 
         assert!(result.is_valid(), "Conversion of {:?} was invalid", source);
         assert!(
-            result.hi() >= T::min_value().to_f64().unwrap()
-                && result.hi() <= T::max_value().to_f64().unwrap(),
+            result.hi() >= T::min_value().to_f32().unwrap()
+                && result.hi() <= T::max_value().to_f32().unwrap(),
             "Conversion of {:?} high word out of range",
             source
         );
@@ -694,7 +818,7 @@ where
             source
         );
 
-        if result.hi() == T::max_value().to_f64().unwrap() {
+        if result.hi() == T::max_value().to_f32().unwrap() {
             assert!(
                 result.lo() < 0.0,
                 "Converted result of {:?} out of range",
@@ -706,7 +830,7 @@ where
                 "Conversion of {:?} did not produce matching value",
                 source
             );
-        } else if result.hi() == T::min_value().to_f64().unwrap() {
+        } else if result.hi() == T::min_value().to_f32().unwrap() {
             assert!(
                 result.lo() >= 0.0,
                 "Converted result of {:?} out of range",
@@ -814,8 +938,8 @@ where
 
         assert!(result.is_valid(), "Conversion of {:?} was invalid", source);
         assert!(
-            result.hi() >= T::min_value().to_f64().unwrap()
-                && result.hi() <= T::max_value().to_f64().unwrap(),
+            result.hi() >= T::min_value().to_f32().unwrap()
+                && result.hi() <= T::max_value().to_f32().unwrap(),
             "Conversion of {:?} high word out of range",
             source
         );

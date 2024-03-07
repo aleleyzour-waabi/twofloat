@@ -205,7 +205,7 @@ fn powf_zero_test() {
 #[test]
 fn powf_test() {
     let mut rng = rand::thread_rng();
-    let value_dist = rand::distributions::Uniform::new(1.0f64, 20.0f64);
+    let value_dist = rand::distributions::Uniform::new(1.0f32, 20.0f32);
     repeated_test(|| {
         let a = rng.sample(value_dist);
         let b = rng.sample(value_dist);

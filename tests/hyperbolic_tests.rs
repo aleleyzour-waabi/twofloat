@@ -15,7 +15,7 @@ fn cosh_sinh_test() {
     repeated_test(|| {
         let source = loop {
             let a = rng.sample(dist);
-            let b = random_float();
+            let b = random_f32();
             if let Ok(result) = TwoFloat::try_from((a, b)) {
                 break result;
             }

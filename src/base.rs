@@ -1,23 +1,23 @@
 use core::{cmp::Ordering, num::FpCategory};
 
-use hexf::hexf64;
+use hexf::hexf32;
 
 use crate::{math_util::mathfn, TwoFloat};
 
 const DEG_PER_RAD: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.ca5dc1a63c1f8p5"),
-    lo: hexf64!("-0x1.1e7ab456405f9p-49"),
+    hi: hexf32!("0x1.ca5dc2p5"),
+    lo: hexf32!("-0x1.1e7ab4p-49"),
 };
 
 const RAD_PER_DEG: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.1df46a2529d39p-6"),
-    lo: hexf64!("0x1.5c1d8becdd291p-62"),
+    hi: hexf32!("0x1.1df46ap-6"),
+    lo: hexf32!("0x1.5c1d8cp-62"),
 };
 
-const EXPONENT_MASK: u64 = 0x7ff;
-const MANTISSA_MASK: u64 = (1 << 52) - 1;
+const EXPONENT_MASK: u32 = (1 <<  8) - 1;
+const MANTISSA_MASK: u32 = (1 << 23) - 1;
 
-/// Checks if two `f64` values do not overlap, with the first value being the
+/// Checks if two `f32` values do not overlap, with the first value being the
 /// more significant. This matches definition 1.4 in Joldes et al. (2017).
 ///
 /// # Examples
@@ -32,21 +32,21 @@ const MANTISSA_MASK: u64 = (1 << 52) - 1;
 /// assert!(!b);
 /// assert!(!c);
 /// ```
-pub fn no_overlap(a: f64, b: f64) -> bool {
+pub fn no_overlap(a: f32, b: f32) -> bool {
     match a.classify() {
         FpCategory::Normal => {
             if b == 0.0 {
                 return true;
             }
             let bits = a.to_bits();
-            let biased_exponent = ((bits >> 52) & EXPONENT_MASK) as i16;
-            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signum(a) != mathfn::signum(b) {
-                1077
+            let biased_exponent = ((bits >> 23) & EXPONENT_MASK) as i16;
+            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signumf(a) != mathfn::signumf(b) {
+                (1<<7) + 23 + 1
             } else {
-                1076
+                (1<<7) + 23
             };
-            let limit = mathfn::exp2((biased_exponent - offset) as f64);
-            match mathfn::abs(b).partial_cmp(&limit) {
+            let limit = mathfn::exp2f((biased_exponent - offset) as f32);
+            match mathfn::fabsf(b).partial_cmp(&limit) {
                 Some(Ordering::Less) => true,
                 Some(Ordering::Equal) => (bits & 1) == 0,
                 _ => false,
@@ -60,57 +60,57 @@ pub fn no_overlap(a: f64, b: f64) -> bool {
 impl TwoFloat {
     /// Smallest finite `TwoFloat` value.
     pub const MIN: Self = Self {
-        hi: f64::MIN,
-        lo: hexf64!("-0x1.fffffffffffffp+969"),
+        hi: f32::MIN,
+        lo: hexf32!("-0x1.fffffp+127"),
     };
 
     /// Smallest positive normal `TwoFloat` value.
     pub const MIN_POSITIVE: Self = Self {
-        hi: f64::MIN_POSITIVE,
+        hi: f32::MIN_POSITIVE,
         lo: 0.0,
     };
 
     /// Largest finite `TwoFloat` value.
     pub const MAX: Self = Self {
-        hi: f64::MAX,
-        lo: hexf64!("0x1.fffffffffffffp+969"),
+        hi: f32::MAX,
+        lo: hexf32!("0x1.fffffep+127"),
     };
 
-    /// Represents an error value equivalent to `f64::NAN`.
+    /// Represents an error value equivalent to `f32::NAN`.
     pub const NAN: Self = Self {
-        hi: f64::NAN,
-        lo: f64::NAN,
+        hi: f32::NAN,
+        lo: f32::NAN,
     };
 
     /// Represents the difference between 1.0 and the next representable normal value.
     pub const EPSILON: Self = Self {
-        hi: f64::MIN_POSITIVE,
+        hi: f32::MIN_POSITIVE,
         lo: 0.0,
     };
 
     /// A positive infinite value
     pub const INFINITY: Self = Self {
-        hi: f64::INFINITY,
-        lo: f64::INFINITY,
+        hi: f32::INFINITY,
+        lo: f32::INFINITY,
     };
 
     /// A negative infinite value
     pub const NEG_INFINITY: Self = Self {
-        hi: f64::NEG_INFINITY,
-        lo: f64::NEG_INFINITY,
+        hi: f32::NEG_INFINITY,
+        lo: f32::NEG_INFINITY,
     };
 
-    /// Creates a new TwoFloat from a constant `f64` value.
+    /// Creates a new TwoFloat from a constant `f32` value.
     ///
     /// # Examples
     ///
     /// ```
     /// # use twofloat::TwoFloat;
-    /// const value: TwoFloat = TwoFloat::from_f64(1.0);
+    /// const value: TwoFloat = TwoFloat::from_f32(1.0);
     /// assert_eq!(value.hi(), 1.0);
     /// ```
     pub const fn from_f64(value: f64) -> Self {
-        TwoFloat { hi: value, lo: 0.0 }
+        TwoFloat { hi: value as f32, lo: 0.0 }
     }
 
     /// Returns the high word of `self`.
@@ -122,7 +122,7 @@ impl TwoFloat {
     /// let value = TwoFloat::new_add(1.0, -1.0e-200);
     /// assert_eq!(value.hi(), 1.0);
     /// ```
-    pub fn hi(&self) -> f64 {
+    pub fn hi(&self) -> f32 {
         self.hi
     }
 
@@ -135,7 +135,7 @@ impl TwoFloat {
     /// let value = TwoFloat::new_add(1.0, -1.0e-200);
     /// assert_eq!(value.lo(), -1.0e-200);
     /// ```
-    pub fn lo(&self) -> f64 {
+    pub fn lo(&self) -> f32 {
         self.lo
     }
 
@@ -289,13 +289,13 @@ impl TwoFloat {
     }
 }
 
-impl PartialEq<f64> for TwoFloat {
-    fn eq(&self, other: &f64) -> bool {
+impl PartialEq<f32> for TwoFloat {
+    fn eq(&self, other: &f32) -> bool {
         self.hi.eq(other) && self.lo == 0.0
     }
 }
 
-impl PartialEq<TwoFloat> for f64 {
+impl PartialEq<TwoFloat> for f32 {
     fn eq(&self, other: &TwoFloat) -> bool {
         self.eq(&other.hi) && other.lo == 0.0
     }
@@ -319,8 +319,8 @@ impl PartialEq<TwoFloat> for TwoFloat {
     }
 }
 
-impl PartialOrd<f64> for TwoFloat {
-    fn partial_cmp(&self, other: &f64) -> Option<Ordering> {
+impl PartialOrd<f32> for TwoFloat {
+    fn partial_cmp(&self, other: &f32) -> Option<Ordering> {
         let hi_cmp = self.hi.partial_cmp(other);
         if hi_cmp == Some(Ordering::Equal) {
             self.lo.partial_cmp(&0.0)
@@ -330,7 +330,7 @@ impl PartialOrd<f64> for TwoFloat {
     }
 }
 
-impl PartialOrd<TwoFloat> for f64 {
+impl PartialOrd<TwoFloat> for f32 {
     fn partial_cmp(&self, other: &TwoFloat) -> Option<Ordering> {
         let hi_cmp = self.partial_cmp(&other.hi);
         if hi_cmp == Some(Ordering::Equal) {
@@ -365,25 +365,25 @@ impl PartialOrd<TwoFloat> for TwoFloat {
 
 #[cfg(test)]
 mod tests {
-    use hexf::hexf64;
+    use hexf::hexf32;
 
     use super::{no_overlap, TwoFloat};
 
-    const ONE: f64 = 1.0;
-    const ONE_NEXT: f64 = hexf64!("0x1.0000000000001p+0");
-    const ONE_NEXT_2: f64 = hexf64!("0x1.0000000000002p+0");
-    const ONE_PREV: f64 = hexf64!("0x1.fffffffffffffp-1");
-    const LOWER_MID_DIFF: f64 = hexf64!("0x1p-54");
-    const LOWER_MID_DIFF_NEXT: f64 = hexf64!("0x1.0000000000001p-54");
-    const UPPER_MID_DIFF: f64 = hexf64!("0x1p-53");
-    const UPPER_MID_DIFF_NEXT: f64 = hexf64!("0x1.0000000000001p-53");
-    const OFFSET_1_4: f64 = hexf64!("0x1p-54");
-    const OFFSET_3_4: f64 = hexf64!("0x1.8p-53");
+    const ONE: f32 = 1.0;
+    const ONE_NEXT: f32 =   hexf32!("0x1.000002p+0");
+    const ONE_NEXT_2: f32 = hexf32!("0x1.000004p+0");
+    const ONE_PREV: f32 = hexf32!("0x1.fffffep-1");
+    const LOWER_MID_DIFF: f32 = hexf32!("0x1p-25");
+    const LOWER_MID_DIFF_NEXT: f32 = hexf32!("0x1.000002p-54");
+    const UPPER_MID_DIFF: f32 = hexf32!("0x1p-24");
+    const UPPER_MID_DIFF_NEXT: f32 = hexf32!("0x1.000002p-24");
+    const OFFSET_1_4: f32 = hexf32!("0x1p-25");
+    const OFFSET_3_4: f32 = hexf32!("0x1.8p-24");
 
     #[test]
     fn no_overlap_test() {
-        assert!(!no_overlap(1.0, hexf64!("0x1p-52")));
-        assert!(!no_overlap(-1.0, hexf64!("-0x1p-52")));
+        assert!(!no_overlap(1.0, hexf32!("0x1p-23")));
+        assert!(!no_overlap(-1.0, hexf32!("-0x1p-23")));
         assert!(no_overlap(1.0, UPPER_MID_DIFF));
         assert!(!no_overlap(1.0, UPPER_MID_DIFF_NEXT));
         assert!(no_overlap(1.0, -LOWER_MID_DIFF));
@@ -398,28 +398,28 @@ mod tests {
         assert!(!no_overlap(-1.0, UPPER_MID_DIFF));
         assert!(no_overlap(-1.0, -UPPER_MID_DIFF));
         assert!(!no_overlap(-1.0, -UPPER_MID_DIFF_NEXT));
-        assert!(!no_overlap(-ONE_NEXT, hexf64!("0x1p-53")));
-        assert!(!no_overlap(-ONE_NEXT, hexf64!("-0x1p-53")));
-        assert!(no_overlap(-ONE_NEXT_2, hexf64!("-0x1p-53")));
-        assert!(no_overlap(-ONE_NEXT_2, hexf64!("0x1p-53")));
-        assert!(no_overlap(1.0, hexf64!("0x1p-1023")));
-        assert!(no_overlap(1.0, hexf64!("-0x1p-1023")));
+        assert!(!no_overlap(-ONE_NEXT, hexf32!("0x1p-24")));
+        assert!(!no_overlap(-ONE_NEXT, hexf32!("-0x1p-24")));
+        assert!(no_overlap(-ONE_NEXT_2, hexf32!("-0x1p-24")));
+        assert!(no_overlap(-ONE_NEXT_2, hexf32!("0x1p-24")));
+        assert!(no_overlap(1.0, hexf32!("0x1p-127")));
+        assert!(no_overlap(1.0, hexf32!("-0x1p-127")));
         assert!(no_overlap(1.0, 0.0));
         assert!(no_overlap(-1.0, -0.0));
 
-        assert!(!no_overlap(hexf64!("0x1p-970"), hexf64!("0x1p-1022")));
-        assert!(no_overlap(hexf64!("0x1p-970"), hexf64!("0x1p-1023")));
-        assert!(!no_overlap(hexf64!("0x1p-971"), hexf64!("0x1p-1023")));
-        assert!(no_overlap(hexf64!("0x1p-971"), hexf64!("0x1p-1024")));
+        assert!(!no_overlap(hexf32!("0x1p-97"), hexf32!("0x1p-126")));
+        assert!(no_overlap(hexf32!("0x1p-97"), hexf32!("0x1p-127")));
+        assert!(!no_overlap(hexf32!("0x1p-98"), hexf32!("0x1p-127")));
+        assert!(no_overlap(hexf32!("0x1p-98"), hexf32!("0x1p-128")));
 
-        assert!(no_overlap(hexf64!("0x1p-1023"), 0.0));
-        assert!(!no_overlap(hexf64!("0x1p-1023"), f64::MIN));
+        assert!(no_overlap(hexf32!("0x1p-127"), 0.0));
+        assert!(!no_overlap(hexf32!("0x1p-127"), f32::MIN));
 
-        assert!(!no_overlap(f64::INFINITY, 1.0));
-        assert!(!no_overlap(f64::NAN, 1.0));
+        assert!(!no_overlap(f32::INFINITY, 1.0));
+        assert!(!no_overlap(f32::NAN, 1.0));
 
         assert!(!no_overlap(0.0, 1.0));
-        assert!(!no_overlap(0.0, f64::MIN));
+        assert!(!no_overlap(0.0, f32::MIN));
         assert!(no_overlap(0.0, 0.0));
     }
 
