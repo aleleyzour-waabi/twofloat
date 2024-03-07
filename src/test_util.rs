@@ -66,14 +66,14 @@ macro_rules! assert_eq_ulp {
         let a_bits = left_val.to_bits();
         let b_bits = right_val.to_bits();
         let fix_sign = |x| {
-            if x & (1 << 63) == 0 {
+            if x & (1 << 31) == 0 {
                 x
             } else {
-                x ^ ((1 << 63) - 1)
+                x ^ ((1 << 31) - 1)
             }
         };
-        let diff = (fix_sign(a_bits) as i64)
-            .saturating_sub(fix_sign(b_bits) as i64)
+        let diff = (fix_sign(a_bits) as i32)
+            .saturating_sub(fix_sign(b_bits) as i32)
             .abs();
         if !(diff <= ulp_val) {
             panic!(r#"assertion failed: `(left == right) ({:?} ulp)`

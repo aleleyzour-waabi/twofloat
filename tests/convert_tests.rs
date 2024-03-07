@@ -217,20 +217,19 @@ impl ConvertBounds for i32 {
 }
 
 impl ConvertBounds for i64 {
-    fn upper_bound() -> f64 {
-        i64::MAX as f64
+    fn upper_bound() -> f32 {
+        i64::MAX as f32
     }
 }
 
 impl ConvertBounds for i128 {
-    fn upper_bound() -> f64 {
-        i128::MAX as f64
+    fn upper_bound() -> f32 {
+        i128::MAX as f32
     }
 }
 
 impl ConvertBounds for u8 {}
 impl ConvertBounds for u16 {}
-impl ConvertBounds for u32 {}
 
 impl ConvertBounds for u32 {
     fn upper_bound() -> f32 {
@@ -238,14 +237,14 @@ impl ConvertBounds for u32 {
     }
 }
 impl ConvertBounds for u64 {
-    fn upper_bound() -> f64 {
-        u64::MAX as f64
+    fn upper_bound() -> f32 {
+        u64::MAX as f32
     }
 }
 
 impl ConvertBounds for u128 {
-    fn upper_bound() -> f64 {
-        u128::MAX as f64
+    fn upper_bound() -> f32 {
+        u128::MAX as f32
     }
 }
 
@@ -463,7 +462,7 @@ int_test! {
 // Helper functions for tests of 64- and 128-bit integer conversions
 
 fn random_frac32() -> u32 {
-    const MANTISSA_RANGE: u64 = 1 << 23;
+    const MANTISSA_RANGE: u32 = 1 << 23;
     rand::thread_rng().gen_range(0..MANTISSA_RANGE)
 }
 
@@ -472,7 +471,7 @@ fn random_frac64() -> u64 {
     rand::thread_rng().gen_range(0..MANTISSA_RANGE)
 }
 
-fn random_positive_float_exp_range32(exp_range: Range<u64>) -> f32 {
+fn random_positive_float_exp_range32(exp_range: Range<u32>) -> f32 {
     let mut rng = rand::thread_rng();
 
     f32::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 23) | random_frac32())
@@ -481,10 +480,10 @@ fn random_positive_float_exp_range32(exp_range: Range<u64>) -> f32 {
 fn random_positive_float_exp_range64(exp_range: Range<u64>) -> f64 {
     let mut rng = rand::thread_rng();
 
-    f32::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 52) | random_frac64())
+    f64::from_bits((rng.gen_range(exp_range.start..exp_range.end) << 52) | random_frac64())
 }
 
-fn random_f32_exp_range(exp_range: Range<u64>) -> f32 {
+fn random_f32_exp_range(exp_range: Range<u32>) -> f32 {
     let x = random_positive_float_exp_range32(exp_range);
     if rand::thread_rng().gen() {
         x
@@ -533,7 +532,7 @@ where
                 break result;
             }
         };
-        let expected = if source.hi() < T::min_value().to_f64().unwrap() {
+        let expected = if source.hi() < T::min_value().to_f32().unwrap() {
             if source.lo() > 0.0 {
                 Ok(T::min_value())
             } else {
@@ -600,7 +599,7 @@ where
     let mut rng = rand::thread_rng();
 
     let mut gen_f32 = if T::min_value() == zero() {
-        || random_positive_float_exp_range(53..1075)
+        || random_positive_float_exp_range32(53..1075)
     } else {
         || random_f32_exp_range(53..1075)
     };
@@ -615,7 +614,7 @@ where
                 continue;
             }
             let b_exponent = (rng.gen_range(-1022..rb) + 1023) as u32;
-            let b_mantissa = random_mantissa();
+            let b_mantissa = random_frac32();
             let b = f32::from_bits(b_mantissa | (b_exponent << 23));
             if no_overlap(a, b) {
                 break if rng.gen() { (a, b) } else { (a, -b) };
@@ -637,23 +636,23 @@ where
     let mut rng = rand::thread_rng();
 
     let mut gen_f32 = if T::min_value() == zero() {
-        || random_positive_float_exp_range(53..1075)
+        || random_positive_float_exp_range32(53..1075)
     } else {
         || random_f32_exp_range(53..1075)
     };
 
     repeated_test(|| {
         let (a, b) = loop {
-            let a = get_valid_f64_gen(&mut gen_f32, |x| {
+            let a = get_valid_f32_gen(&mut gen_f32, |x| {
                 x > T::lower_bound() && x < T::upper_bound() && x.fract() != 0.0
             });
             let rb = right_bit(a).unwrap_or(i16::MIN);
-            if rb < -1019 {
+            if rb < -126 {
                 continue;
             }
-            let b_exponent = (rng.gen_range(-1022..rb) + 1023) as u32;
-            let b_mantissa = random_frac64();
-            let b = f32::from_bits(b_mantissa | (b_exponent << 23));
+            let b_exponent = (rng.gen_range(-126..rb) + 1023) as u32;
+            let b_mantissa = random_frac32();
+            let b = f32::from_bits(b_mantissa | (b_exponent <<23));
             if no_overlap(a, b) {
                 break if rng.gen() { (a, b) } else { (a, -b) };
             }
@@ -667,16 +666,16 @@ where
     });
 }
 
-fn from_twofloat_split_fract32<T>()
+fn from_twofloat_split_fract64<T>()
 where
     T: ConvertBounds,
 {
     let mut rng = rand::thread_rng();
 
     let mut gen_f32 = if T::min_value() == zero() {
-        || random_positive_float_exp_range(1023..1087)
+        || random_positive_float_exp_range32(((1<<7)-1).. ((1<<7) + 31))
     } else {
-        || random_f32_exp_range(1023..1087)
+        || random_f32_exp_range(((1<<7)-1).. ((1<<7) + 31))
     };
 
     let fract_dist =
@@ -710,7 +709,7 @@ where
     });
 }
 
-fn from_twofloat_large32<T>()
+fn from_twofloat_large64<T>()
 where
     T: ConvertBounds,
 {
@@ -895,7 +894,7 @@ macro_rules! int64_test {
 
             #[test]
             fn to_twofloat64() {
-                super::to_twofloat64::<$t>();
+                super::to_twofloat32::<$t>();
             }
         }
     };

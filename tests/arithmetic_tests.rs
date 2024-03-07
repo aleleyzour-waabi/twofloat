@@ -223,7 +223,7 @@ where
 
 fn f32_twofloat_left(op: Operator) {
     let mut rng = rand::thread_rng();
-    let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
+    let high_range = rand::distributions::Uniform::new_inclusive(-1e20, 1e20);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
 
     repeated_test(|| loop {
@@ -257,7 +257,7 @@ fn f32_twofloat_left(op: Operator) {
 
 fn f32_twofloat_right(op: Operator) {
     let mut rng = rand::thread_rng();
-    let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
+    let high_range = rand::distributions::Uniform::new_inclusive(-1e20, 1e20);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
 
     repeated_test(|| loop {
@@ -295,7 +295,7 @@ fn f32_twofloat_reversible(op: Operator) {
     }
 
     let mut rng = rand::thread_rng();
-    let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
+    let high_range = rand::distributions::Uniform::new_inclusive(-1e20, 1e20);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
 
     repeated_test(|| loop {
@@ -376,7 +376,7 @@ fn f32_twofloat_assign(op: Operator) {
 
 fn twofloat_op(op: Operator) {
     let mut rng = rand::thread_rng();
-    let high_range = rand::distributions::Uniform::new_inclusive(-1e50, 1e50);
+    let high_range = rand::distributions::Uniform::new_inclusive(-1e20, 1e20);
     let low_range = rand::distributions::Uniform::new_inclusive(-1.0, 1.0);
 
     repeated_test(|| loop {
