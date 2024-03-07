@@ -376,7 +376,7 @@ mod tests {
     const ONE_NEXT_2: f32 = hexf32!("0x1.000004p+0");
     const ONE_PREV: f32 = hexf32!("0x1.fffffep-1");
     const LOWER_MID_DIFF: f32 = hexf32!("0x1p-25");
-    const LOWER_MID_DIFF_NEXT: f32 = hexf32!("0x1.000002p-54");
+    const LOWER_MID_DIFF_NEXT: f32 = hexf32!("0x1.000002p-23");
     const UPPER_MID_DIFF: f32 = hexf32!("0x1p-24");
     const UPPER_MID_DIFF_NEXT: f32 = hexf32!("0x1.000002p-24");
     const OFFSET_1_4: f32 = hexf32!("0x1p-25");
