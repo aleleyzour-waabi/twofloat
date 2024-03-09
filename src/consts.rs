@@ -11,13 +11,13 @@ pub const E: TwoFloat = TwoFloat {
 /// 1/π
 pub const FRAC_1_PI: TwoFloat = TwoFloat {
     hi: hexf32!("0x1.45f306p-2"),
-    lo: hexf32!("-0x1.6b01ep-56"),
+    lo: hexf32!("-0x1.dab8aap-27"),
 };
 
 /// 2/π
 pub const FRAC_2_PI: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.45f306p-1"),
-    lo: hexf32!("-0x1.6b01ep-55"),
+    hi: hexf32!("0x1.921fb6p+0"),
+    lo: hexf32!("-0x1.691296p-56"),
 };
 
 /// 2/sqrt(π)
@@ -35,7 +35,7 @@ pub const FRAC_1_SQRT_2: TwoFloat = TwoFloat {
 /// π/2
 pub const FRAC_PI_2: TwoFloat = TwoFloat {
     hi: hexf32!("0x1.921fb6p0"),
-    lo: hexf32!("0x1.1a6264p-54"),
+    lo: hexf32!("0x1.5ee4b2p-22"),
 };
 
 /// π/3
@@ -47,7 +47,7 @@ pub const FRAC_PI_3: TwoFloat = TwoFloat {
 /// π/4
 pub const FRAC_PI_4: TwoFloat = TwoFloat {
     hi: hexf32!("0x1.921fb6p-1"),
-    lo: hexf32!("0x1.1a6264p-55"),
+    lo: hexf32!("-0x1.3a69dcp-25"),
 };
 
 /// π/6

@@ -135,43 +135,43 @@ const TAN_COEFFS: [TwoFloat; 14] = [
 const ASIN_COEFFS: [TwoFloat; 10] = [
     TwoFloat {
         hi: hexf32!("0x1.555556p-3"),
-        lo: hexf32!("0x1.d240d2p-58"),
+        lo: hexf32!("-0x1.1e68b2p-25"),
     },
     TwoFloat {
         hi: hexf32!("0x1.333334p-4"),
-        lo: hexf32!("-0x1.af55cep-62"),
+        lo: hexf32!("0x1.3f58bep-30"),
     },
     TwoFloat {
         hi: hexf32!("0x1.6db6bcp-5"),
-        lo: hexf32!("-0x1.cfdfeap-61"),
+        lo: hexf32!("-0x1.855246p-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.f1ce02p-6"),
-        lo: hexf32!("0x1.5fe81ap-72"),
+        lo: hexf32!("-0x1.14c7aep-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.6e1af8p-6"),
-        lo: hexf32!("-0x1.b32840p-60"),
+        lo: hexf32!("-0x1.3d908p-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.20d826p-6"),
-        lo: hexf32!("-0x1.240882p-61"),
+        lo: hexf32!("-0x1.4494bp-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.8d6db6p-7"),
-        lo: hexf32!("0x1.588382p-61"),
+        lo: hexf32!("-0x1.84946p-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.3c0480p-6"),
-        lo: hexf32!("-0x1.c08810p-62"),
+        lo: hexf32!("0x1.c33e0ap-30"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.401c6ap-7"),
-        lo: hexf32!("-0x1.838c0ap-64"),
+        lo: hexf32!("-0x1.a22824p-35"),
     },
     TwoFloat {
         hi: hexf32!("0x1.119828p-5"),
-        lo: hexf32!("-0x1.fa4bf4p-59"),
+        lo: hexf32!("-0x1.baf2bep-30"),
     },
 ];
 
@@ -540,7 +540,13 @@ mod tests {
         TwoFloat,
     };
 
-    const THRESHOLD: f32 = 1e-10;
+    const THRESHOLD: f32 = 1e-6;
+
+    fn approx_eq(a: f64, b: TwoFloat) -> bool
+    {
+        const THRESHOLD64: f64 = 1e-10;
+        (a - f64::from(b)).abs() < THRESHOLD64
+    }
 
     #[test]
     fn quadrant_test() {
@@ -564,51 +570,51 @@ mod tests {
     fn sin_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).sin());
 
-        assert!((0.5f32.sin() - TwoFloat::from(0.5).sin()).abs() < THRESHOLD);
-        assert!((1.4f32.sin() - TwoFloat::from(1.4).sin()).abs() < THRESHOLD);
-        assert!((3.0f32.sin() - TwoFloat::from(3.0).sin()).abs() < THRESHOLD);
-        assert!((4.0f32.sin() - TwoFloat::from(4.0).sin()).abs() < THRESHOLD);
-        assert!((6.0f32.sin() - TwoFloat::from(6.0).sin()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.sin(), TwoFloat::from(0.5).sin()));
+        assert!(approx_eq(1.4f64.sin(), TwoFloat::from(1.4).sin()));
+        assert!(approx_eq(3.0f64.sin(), TwoFloat::from(3.0).sin()));
+        assert!(approx_eq(4.0f64.sin(), TwoFloat::from(4.0).sin()));
+        assert!(approx_eq(6.0f64.sin(), TwoFloat::from(6.0).sin()));
 
-        assert!((0.5f32.sin() + TwoFloat::from(-0.5).sin()).abs() < THRESHOLD);
-        assert!((1.4f32.sin() + TwoFloat::from(-1.4).sin()).abs() < THRESHOLD);
-        assert!((3.0f32.sin() + TwoFloat::from(-3.0).sin()).abs() < THRESHOLD);
-        assert!((4.0f32.sin() + TwoFloat::from(-4.0).sin()).abs() < THRESHOLD);
-        assert!((6.0f32.sin() + TwoFloat::from(-6.0).sin()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.sin(), TwoFloat::from(-0.5).sin()));
+        assert!(approx_eq(1.4f64.sin(), TwoFloat::from(-1.4).sin()));
+        assert!(approx_eq(3.0f64.sin(), TwoFloat::from(-3.0).sin()));
+        assert!(approx_eq(4.0f64.sin(), TwoFloat::from(-4.0).sin()));
+        assert!(approx_eq(6.0f64.sin(), TwoFloat::from(-6.0).sin()));
     }
 
     #[test]
     fn cos_test() {
         assert_eq!(1.0, TwoFloat::from(0.0).cos());
 
-        assert!((0.5f32.cos() - TwoFloat::from(0.5).cos()).abs() < THRESHOLD);
-        assert!((1.4f32.cos() - TwoFloat::from(1.4).cos()).abs() < THRESHOLD);
-        assert!((3.0f32.cos() - TwoFloat::from(3.0).cos()).abs() < THRESHOLD);
-        assert!((4.0f32.cos() - TwoFloat::from(4.0).cos()).abs() < THRESHOLD);
-        assert!((6.0f32.cos() - TwoFloat::from(6.0).cos()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.cos(), TwoFloat::from(0.5).cos()));
+        assert!(approx_eq(1.4f64.cos(), TwoFloat::from(1.4).cos()));
+        assert!(approx_eq(3.0f64.cos(), TwoFloat::from(3.0).cos()));
+        assert!(approx_eq(4.0f64.cos(), TwoFloat::from(4.0).cos()));
+        assert!(approx_eq(6.0f64.cos(), TwoFloat::from(6.0).cos()));
 
-        assert!((0.5f32.cos() - TwoFloat::from(-0.5).cos()).abs() < THRESHOLD);
-        assert!((1.4f32.cos() - TwoFloat::from(-1.4).cos()).abs() < THRESHOLD);
-        assert!((3.0f32.cos() - TwoFloat::from(-3.0).cos()).abs() < THRESHOLD);
-        assert!((4.0f32.cos() - TwoFloat::from(-4.0).cos()).abs() < THRESHOLD);
-        assert!((6.0f32.cos() - TwoFloat::from(-6.0).cos()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.cos(), TwoFloat::from(-0.5).cos()));
+        assert!(approx_eq(1.4f64.cos(), TwoFloat::from(-1.4).cos()));
+        assert!(approx_eq(3.0f64.cos(), TwoFloat::from(-3.0).cos()));
+        assert!(approx_eq(4.0f64.cos(), TwoFloat::from(-4.0).cos()));
+        assert!(approx_eq(6.0f64.cos(), TwoFloat::from(-6.0).cos()));
     }
 
     #[test]
     fn tan_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).tan());
 
-        assert!((0.5f32.tan() - TwoFloat::from(0.5).tan()).abs() < THRESHOLD);
-        assert!((1.4f32.tan() - TwoFloat::from(1.4).tan()).abs() < THRESHOLD);
-        assert!((3.0f32.tan() - TwoFloat::from(3.0).tan()).abs() < THRESHOLD);
-        assert!((4.0f32.tan() - TwoFloat::from(4.0).tan()).abs() < THRESHOLD);
-        assert!((6.0f32.tan() - TwoFloat::from(6.0).tan()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.tan(), TwoFloat::from(0.5).tan()));
+        assert!(approx_eq(1.4f64.tan(), TwoFloat::from(1.4).tan()));
+        assert!(approx_eq(3.0f64.tan(), TwoFloat::from(3.0).tan()));
+        assert!(approx_eq(4.0f64.tan(), TwoFloat::from(4.0).tan()));
+        assert!(approx_eq(6.0f64.tan(), TwoFloat::from(6.0).tan()));
 
-        assert!((0.5f32.tan() + TwoFloat::from(-0.5).tan()).abs() < THRESHOLD);
-        assert!((1.4f32.tan() + TwoFloat::from(-1.4).tan()).abs() < THRESHOLD);
-        assert!((3.0f32.tan() + TwoFloat::from(-3.0).tan()).abs() < THRESHOLD);
-        assert!((4.0f32.tan() + TwoFloat::from(-4.0).tan()).abs() < THRESHOLD);
-        assert!((6.0f32.tan() + TwoFloat::from(-6.0).tan()).abs() < THRESHOLD);
+        assert!(approx_eq(0.5f64.tan(), TwoFloat::from(-0.5).tan()));
+        assert!(approx_eq(1.4f64.tan(), TwoFloat::from(-1.4).tan()));
+        assert!(approx_eq(3.0f64.tan(), TwoFloat::from(-3.0).tan()));
+        assert!(approx_eq(4.0f64.tan(), TwoFloat::from(-4.0).tan()));
+        assert!(approx_eq(6.0f64.tan(), TwoFloat::from(-6.0).tan()));
     }
 
     #[test]
@@ -625,10 +631,11 @@ mod tests {
 
     #[test]
     fn acos_test() {
+        let _one_pi_over_4= TwoFloat::from(3.14159274f32)/ TwoFloat::from(4.0);
         assert!((TwoFloat::from(0.0).acos() - FRAC_PI_2).abs() < THRESHOLD);
 
-        assert!((0.25f32.acos() - TwoFloat::from(0.25).acos()) < THRESHOLD);
-        assert!((0.75f32.acos() - TwoFloat::from(0.75).acos()) < THRESHOLD);
+        assert!(approx_eq(0.25f64.acos(), TwoFloat::from(0.25).acos()));
+        assert!(approx_eq(0.75f64.acos(), TwoFloat::from(0.75).acos()));
         assert_eq!(0.0, TwoFloat::from(1.0).acos());
 
         assert!((0.25f32.asin() - TwoFloat::from(-0.25).acos()) < THRESHOLD);

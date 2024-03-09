@@ -63,7 +63,7 @@ impl TwoFloat {
     /// Smallest finite `TwoFloat` value.
     pub const MIN: Self = Self {
         hi: f32::MIN,
-        lo: hexf32!("-0x1.fffffp+127"),
+        lo: hexf32!("-0x1.fffffep+102"),
     };
 
     /// Smallest positive normal `TwoFloat` value.
@@ -75,7 +75,9 @@ impl TwoFloat {
     /// Largest finite `TwoFloat` value.
     pub const MAX: Self = Self {
         hi: f32::MAX,
-        lo: hexf32!("0x1.fffffep+127"),
+        lo: hexf32!("-0x1.fffffep+102"), // 102?? f64 says  lo: hexf64!("-0x1.fffffffffffffp+969"),
+                                         // 969 = 1024 - 55 = (1024 -1) - 53 -1 = (1<<10)  -52 -3 , but -3??
+                                         // for 32bits: (1<<7)- 23 -3  = 128 - 23 -3 == 102
     };
 
     /// Represents an error value equivalent to `f32::NAN`.
@@ -409,10 +411,10 @@ mod tests {
         assert!(no_overlap(1.0, 0.0));
         assert!(no_overlap(-1.0, -0.0));
 
-        assert!(!no_overlap(hexf32!("0x1p-97"), hexf32!("0x1p-126")));
-        assert!(no_overlap(hexf32!("0x1p-97"), hexf32!("0x1p-127")));
-        assert!(!no_overlap(hexf32!("0x1p-98"), hexf32!("0x1p-127")));
-        assert!(no_overlap(hexf32!("0x1p-98"), hexf32!("0x1p-128")));
+        assert!(!no_overlap(hexf32!("0x1p-103"), hexf32!("0x1p-126"))); // why? for f64 was 1p-970, 970 = ((1<<10) -1) - 53), 127 - 24 = 103
+        assert!(no_overlap(hexf32!("0x1p-103"), hexf32!("0x1p-127")));
+        assert!(!no_overlap(hexf32!("0x1p-104"), hexf32!("0x1p-127")));
+        assert!(no_overlap(hexf32!("0x1p-104"), hexf32!("0x1p-128")));
 
         assert!(no_overlap(hexf32!("0x1p-127"), 0.0));
         assert!(!no_overlap(hexf32!("0x1p-127"), f32::MIN));
