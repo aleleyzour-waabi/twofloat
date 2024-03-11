@@ -5,7 +5,7 @@ const TEST_ITERS: usize = 100000;
 pub fn random_f32() -> f32 {
     let mut engine = rand::thread_rng();
     let mantissa_dist = rand::distributions::Uniform::new(0, 1u32 << 23);
-    let exponent_dist = rand::distributions::Uniform::new(0, (1u32 << 8)-1);
+    let exponent_dist = rand::distributions::Uniform::new(0, (1u32 << 8) - 1);
     let x = f32::from_bits(engine.sample(mantissa_dist) | (engine.sample(exponent_dist) << 23));
     if engine.gen() {
         x

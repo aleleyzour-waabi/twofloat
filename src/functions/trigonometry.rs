@@ -542,8 +542,7 @@ mod tests {
 
     const THRESHOLD: f32 = 1e-6;
 
-    fn approx_eq(a: f64, b: TwoFloat) -> bool
-    {
+    fn approx_eq(a: f64, b: TwoFloat) -> bool {
         const THRESHOLD64: f64 = 1e-10;
         (a - f64::from(b)).abs() < THRESHOLD64
     }
@@ -631,7 +630,7 @@ mod tests {
 
     #[test]
     fn acos_test() {
-        let _one_pi_over_4= TwoFloat::from(3.14159274f32)/ TwoFloat::from(4.0);
+        let _one_pi_over_4 = TwoFloat::from(3.14159274f32) / TwoFloat::from(4.0);
         assert!((TwoFloat::from(0.0).acos() - FRAC_PI_2).abs() < THRESHOLD);
 
         assert!(approx_eq(0.25f64.acos(), TwoFloat::from(0.25).acos()));

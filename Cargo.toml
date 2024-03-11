@@ -1,5 +1,5 @@
 [package]
-name = "twofloat"
+name = "twofloat_f32"
 version = "0.7.0"
 authors = ["Andrew Tribick"]
 

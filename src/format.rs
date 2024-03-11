@@ -57,7 +57,13 @@ impl fmt::LowerExp for TwoFloat {
                     p,
                     mathfn::fabsf(self.lo)
                 ),
-                None => write!(f, "{:+e} {} {:e}", self.hi, sign_char, mathfn::fabsf(self.lo)),
+                None => write!(
+                    f,
+                    "{:+e} {} {:e}",
+                    self.hi,
+                    sign_char,
+                    mathfn::fabsf(self.lo)
+                ),
             }
         } else {
             match f.precision() {
@@ -70,7 +76,13 @@ impl fmt::LowerExp for TwoFloat {
                     p,
                     mathfn::fabsf(self.lo)
                 ),
-                None => write!(f, "{:e} {} {:e}", self.hi, sign_char, mathfn::fabsf(self.lo)),
+                None => write!(
+                    f,
+                    "{:e} {} {:e}",
+                    self.hi,
+                    sign_char,
+                    mathfn::fabsf(self.lo)
+                ),
             }
         }
     }
@@ -94,7 +106,13 @@ impl fmt::UpperExp for TwoFloat {
                     p,
                     mathfn::fabsf(self.lo)
                 ),
-                None => write!(f, "{:+E} {} {:E}", self.hi, sign_char, mathfn::fabsf(self.lo)),
+                None => write!(
+                    f,
+                    "{:+E} {} {:E}",
+                    self.hi,
+                    sign_char,
+                    mathfn::fabsf(self.lo)
+                ),
             }
         } else {
             match f.precision() {
@@ -107,7 +125,13 @@ impl fmt::UpperExp for TwoFloat {
                     p,
                     mathfn::fabsf(self.lo)
                 ),
-                None => write!(f, "{:E} {} {:E}", self.hi, sign_char, mathfn::fabsf(self.lo)),
+                None => write!(
+                    f,
+                    "{:E} {} {:E}",
+                    self.hi,
+                    sign_char,
+                    mathfn::fabsf(self.lo)
+                ),
             }
         }
     }

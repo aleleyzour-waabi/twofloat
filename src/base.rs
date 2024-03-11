@@ -14,7 +14,7 @@ const RAD_PER_DEG: TwoFloat = TwoFloat {
     lo: hexf32!("0x1.5c1d8cp-62"),
 };
 
-const EXPONENT_MASK: u32 = (1 <<  8) - 1;
+const EXPONENT_MASK: u32 = (1 << 8) - 1;
 const MANTISSA_MASK: u32 = (1 << 23) - 1;
 
 /// Checks if two `f32` values do not overlap, with the first value being the
@@ -40,10 +40,11 @@ pub fn no_overlap(a: f32, b: f32) -> bool {
             }
             let bits = a.to_bits();
             let biased_exponent = ((bits >> 23) & EXPONENT_MASK) as i16;
-            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signumf(a) != mathfn::signumf(b) {
-                (1<<7) + 23 + 1
+            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signumf(a) != mathfn::signumf(b)
+            {
+                (1 << 7) + 23 + 1
             } else {
-                (1<<7) + 23
+                (1 << 7) + 23
             };
             let limit = mathfn::exp2f((biased_exponent - offset) as f32);
             match mathfn::fabsf(b).partial_cmp(&limit) {
@@ -56,8 +57,6 @@ pub fn no_overlap(a: f32, b: f32) -> bool {
         _ => false,
     }
 }
-
-
 
 impl TwoFloat {
     /// Smallest finite `TwoFloat` value.
@@ -114,7 +113,10 @@ impl TwoFloat {
     /// assert_eq!(value.hi(), 1.0);
     /// ```
     pub const fn from_f64(value: f64) -> Self {
-        TwoFloat { hi: value as f32, lo: 0.0 }
+        TwoFloat {
+            hi: value as f32,
+            lo: 0.0,
+        }
     }
 
     /// Returns the high word of `self`.
@@ -374,7 +376,7 @@ mod tests {
     use super::{no_overlap, TwoFloat};
 
     const ONE: f32 = 1.0;
-    const ONE_NEXT: f32 =   hexf32!("0x1.000002p+0");
+    const ONE_NEXT: f32 = hexf32!("0x1.000002p+0");
     const ONE_NEXT_2: f32 = hexf32!("0x1.000004p+0");
     const ONE_PREV: f32 = hexf32!("0x1.fffffep-1");
     const LOWER_MID_DIFF: f32 = hexf32!("0x1p-25");
