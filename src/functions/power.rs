@@ -1,3 +1,4 @@
+use crate::math_util::mathfn;
 use crate::TwoFloat;
 
 impl TwoFloat {
@@ -88,10 +89,10 @@ impl TwoFloat {
                     Self::NAN
                 } else {
                     let abs_result = (y * self.abs().ln()).exp();
-                    let low_trunc = if self.lo.trunc() == 0.0 {
-                        self.hi.trunc()
+                    let low_trunc = if mathfn::truncf(self.lo) == 0.0 {
+                        mathfn::truncf(self.hi)
                     } else {
-                        self.lo.trunc()
+                        mathfn::truncf(self.lo)
                     };
 
                     if low_trunc % 2.0 == 0.0 {
