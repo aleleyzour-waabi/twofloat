@@ -46,7 +46,7 @@ pub(crate) mod mathfn {
     }
     #[inline(always)]
     pub fn ln_1p(x: f32) -> f32 {
-        libm::log1p(x)
+        libm::log1pf(x)
     }
 }
 

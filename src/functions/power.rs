@@ -85,7 +85,7 @@ impl TwoFloat {
             (false, false) => {
                 if self.is_sign_positive() {
                     (y * self.ln()).exp()
-                } else if self.hi.fract() != 0.0 || self.lo.fract() != 0.0 {
+                } else if mathfn::fract(self.hi) != 0.0 || mathfn::fract(self.lo) != 0.0 {
                     Self::NAN
                 } else {
                     let abs_result = (y * self.abs().ln()).exp();
