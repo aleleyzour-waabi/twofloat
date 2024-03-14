@@ -61,23 +61,35 @@ impl TryFrom<[f32; 2]> for TwoFloat {
     }
 }
 
-macro_rules! float_convert {
-    ($type:tt) => {
-        impl From<$type> for TwoFloat {
-            fn from(value: $type) -> Self {
-                Self {
-                    hi: value as f32,
-                    lo: 0.0,
-                }
-            }
+impl From<f32> for TwoFloat {
+    fn from(value: f32) -> Self {
+        Self {
+            hi: value,
+            lo: 0.0,
         }
-
-        from_conversion!(|value: TwoFloat| -> $type { value.hi as $type });
-    };
+    }
 }
 
-float_convert!(f64);
-float_convert!(f32);
+impl From<f64> for TwoFloat {
+    fn from(value: f64) -> Self {
+        Self {
+            hi: value as f32,
+            lo: (value - ((value as f32) as f64)) as f32
+        }
+    }
+}
+
+impl Into<f64> for TwoFloat {
+    fn into(self) -> f64 {
+        (self.hi as f64) + (self.lo as f64)
+    }
+}
+
+impl Into<f32> for TwoFloat {
+    fn into(self) -> f32 {
+        self.hi
+    }
+}
 
 macro_rules! int_convert {
     ($type:tt) => {

@@ -112,8 +112,7 @@ impl TwoFloat {
     /// const value: TwoFloat = TwoFloat::from_f32(1.0);
     /// assert_eq!(value.hi(), 1.0);
     /// ```
-    pub  fn from_f64(value: f64) -> Self {
-
+    pub fn from_f64(value: f64) -> Self {
         TwoFloat {
             hi: value as f32,
             lo: (value - ((value as f32) as f64)) as f32,
