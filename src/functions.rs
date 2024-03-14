@@ -11,5 +11,4 @@ pub mod explog;
 pub mod hyperbolic;
 #[cfg(feature = "math_funcs")]
 pub mod power;
-#[cfg(feature = "math_funcs")]
 pub mod trigonometry;
