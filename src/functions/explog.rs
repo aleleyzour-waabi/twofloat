@@ -386,7 +386,7 @@ impl TwoFloat {
         } else if self <= 0.0 {
             Self::NAN
         } else {
-            let mut x = Self::from(self.hi.log2());
+            let mut x = Self::from(mathfn::log2(self.hi));
             x += (self * (-x).exp2() - 1.0) * FRAC_1_LN_2;
             x + (self * (-x).exp2() - 1.0) * FRAC_1_LN_2
         }

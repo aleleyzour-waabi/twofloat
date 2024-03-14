@@ -20,7 +20,7 @@ impl TwoFloat {
         } else if self.hi == 0.0 && self.lo == 0.0 {
             Self { hi: 0.0, lo: 0.0 }
         } else {
-            let x = self.hi.sqrt().recip();
+            let x = mathfn::rsqrt(self.hi);
             let y = self.hi * x;
             Self::new_add(y, (self - Self::new_mul(y, y)).hi * (x * 0.5))
         }
@@ -38,7 +38,7 @@ impl TwoFloat {
     /// assert!(b.powi(3) - a < 1e-16);
     /// ```
     pub fn cbrt(self) -> Self {
-        let mut x = Self::from(self.hi.cbrt());
+        let mut x = Self::from(mathfn::cbrt(self.hi));
         let mut x2 = x * x;
         x -= (x2 * x - self) / (3.0 * x2);
         x2 = x * x;

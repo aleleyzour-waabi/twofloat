@@ -9,6 +9,18 @@ pub(crate) mod mathfn {
         libm::fabsf(x)
     }
     #[inline(always)]
+    pub fn sqrt(x: f32) -> f32 {
+        libm::sqrtf(x)
+    }
+    #[inline(always)]
+    pub fn cbrt(x: f32) -> f32 {
+        libm::cbrtf(x)
+    }
+    #[inline(always)]
+    pub fn rsqrt(x: f32) -> f32 {
+        1.0_f32/ libm::sqrtf(x)
+    }
+    #[inline(always)]
     pub fn ceil(x: f32) -> f32 {
         libm::ceilf(x)
     }
@@ -45,6 +57,10 @@ pub(crate) mod mathfn {
         libm::logf(x)
     }
     #[inline(always)]
+    pub fn log2(x: f32) -> f32 {
+        libm::log2f(x)
+    }
+    #[inline(always)]
     pub fn ln_1p(x: f32) -> f32 {
         libm::log1pf(x)
     }
@@ -55,6 +71,18 @@ pub(crate) mod mathfn {
     #[inline(always)]
     pub fn abs(x: f32) -> f32 {
         x.abs()
+    }
+    #[inline(always)]
+    pub fn sqrt(x: f32) -> f32 {
+        x.sqrt()
+    }
+    #[inline(always)]
+    pub fn cbrt(x: f32) -> f32 {
+        x.cbrt()
+    }
+    #[inline(always)]
+    pub fn rsqrt(x: f32) -> f32 {
+        x.sqrt().recip()
     }
     #[inline(always)]
     pub fn ceil(x: f32) -> f32 {
@@ -98,6 +126,10 @@ pub(crate) mod mathfn {
     #[inline(always)]
     pub fn ln(x: f32) -> f32 {
         x.ln()
+    }
+    #[inline(always)]
+    pub fn log2(x: f32) -> f32 {
+        x.log2()
     }
     #[inline(always)]
     pub fn ln_1p(x: f32) -> f32 {
