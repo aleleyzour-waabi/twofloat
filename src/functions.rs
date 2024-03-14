@@ -9,6 +9,5 @@ mod function_utils;
 pub mod explog;
 #[cfg(feature = "math_funcs")]
 pub mod hyperbolic;
-#[cfg(feature = "math_funcs")]
 pub mod power;
 pub mod trigonometry;
