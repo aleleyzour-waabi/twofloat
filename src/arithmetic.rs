@@ -43,7 +43,7 @@ impl TwoFloat {
         let p = a * b;
         Self {
             hi: p,
-            lo: mathfn::fmaf(a, b, -p),
+            lo: mathfn::fma(a, b, -p),
         }
     }
 
@@ -128,7 +128,7 @@ binary_ops! {
     /// (2017) Algorithm 9.
     fn Mul::mul<'a, 'b>(self: &'a TwoFloat, rhs: &'b f32) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, *rhs).into();
-        let cl3 = mathfn::fmaf(self.lo, *rhs, cl1);
+        let cl3 = mathfn::fma(self.lo, *rhs, cl1);
         fast_two_sum(ch, cl3)
     }
 
@@ -136,7 +136,7 @@ binary_ops! {
     /// (2017) Algorithm 9.
     fn Mul::mul<'a, 'b>(self: &'a f32, rhs: &'b TwoFloat) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(rhs.hi, *self).into();
-        let cl3 = mathfn::fmaf(rhs.lo, *self, cl1);
+        let cl3 = mathfn::fma(rhs.lo, *self, cl1);
         fast_two_sum(ch, cl3)
     }
 
@@ -145,8 +145,8 @@ binary_ops! {
     fn Mul::mul<'a, 'b>(self: &'a TwoFloat, rhs: &'b TwoFloat) -> TwoFloat {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, rhs.hi).into();
         let tl0 = self.lo * rhs.lo;
-        let tl1 = mathfn::fmaf(self.hi, rhs.lo, tl0);
-        let cl2 = mathfn::fmaf(self.lo, rhs.hi, tl1);
+        let tl1 = mathfn::fma(self.hi, rhs.lo, tl0);
+        let cl2 = mathfn::fma(self.lo, rhs.hi, tl1);
         let cl3 = cl1 + cl2;
         fast_two_sum(ch, cl3)
     }
@@ -175,7 +175,7 @@ binary_ops! {
         let d = e * th;
         let m = d + th;
         let (ch, cl1) = TwoFloat::new_mul(m.hi, *self).into();
-        let cl3 = mathfn::fmaf(m.lo, *self, cl1);
+        let cl3 = mathfn::fma(m.lo, *self, cl1);
         fast_two_sum(ch, cl3)
     }
 
@@ -253,7 +253,7 @@ assign_ops! {
     /// (2017) Algorithm 9.
     fn MulAssign::mul_assign<'a>(self: &mut TwoFloat, rhs: &'a f32) {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, *rhs).into();
-        let cl3 = mathfn::fmaf(self.lo, *rhs, cl1);
+        let cl3 = mathfn::fma(self.lo, *rhs, cl1);
         *self = fast_two_sum(ch, cl3);
     }
 
@@ -262,8 +262,8 @@ assign_ops! {
     fn MulAssign::mul_assign<'a>(self: &mut TwoFloat, rhs: &'a TwoFloat) {
         let (ch, cl1) = TwoFloat::new_mul(self.hi, rhs.hi).into();
         let tl0 = self.lo * rhs.lo;
-        let tl1 = mathfn::fmaf(self.hi, rhs.lo, tl0);
-        let cl2 = mathfn::fmaf(self.lo, rhs.hi, tl1);
+        let tl1 = mathfn::fma(self.hi, rhs.lo, tl0);
+        let cl2 = mathfn::fma(self.lo, rhs.hi, tl1);
         let cl3 = cl1 + cl2;
         *self = fast_two_sum(ch, cl3)
     }

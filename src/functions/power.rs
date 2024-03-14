@@ -89,10 +89,10 @@ impl TwoFloat {
                     Self::NAN
                 } else {
                     let abs_result = (y * self.abs().ln()).exp();
-                    let low_trunc = if mathfn::truncf(self.lo) == 0.0 {
-                        mathfn::truncf(self.hi)
+                    let low_trunc = if mathfn::trunc(self.lo) == 0.0 {
+                        mathfn::trunc(self.hi)
                     } else {
-                        mathfn::truncf(self.lo)
+                        mathfn::trunc(self.lo)
                     };
 
                     if low_trunc % 2.0 == 0.0 {

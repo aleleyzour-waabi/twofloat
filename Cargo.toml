@@ -24,6 +24,7 @@ test = true
 default = ["std", "math_funcs"]
 math_funcs = ["std"]
 std = ["num-traits/std"]
+embedded= ["math_funcs"]
 
 [dependencies]
 hexf = "0.2"

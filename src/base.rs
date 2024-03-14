@@ -40,14 +40,14 @@ pub fn no_overlap(a: f32, b: f32) -> bool {
             }
             let bits = a.to_bits();
             let biased_exponent = ((bits >> 23) & EXPONENT_MASK) as i16;
-            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signumf(a) != mathfn::signumf(b)
+            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signum(a) != mathfn::signum(b)
             {
                 (1 << 7) + 23 + 1
             } else {
                 (1 << 7) + 23
             };
-            let limit = mathfn::exp2f((biased_exponent - offset) as f32);
-            match mathfn::fabsf(b).partial_cmp(&limit) {
+            let limit = mathfn::exp2((biased_exponent - offset) as f32);
+            match mathfn::abs(b).partial_cmp(&limit) {
                 Some(Ordering::Less) => true,
                 Some(Ordering::Equal) => (bits & 1) == 0,
                 _ => false,

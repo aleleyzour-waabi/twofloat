@@ -1,6 +1,7 @@
 use hexf::hexf32;
 
 use crate::{consts::LN_2, TwoFloat};
+use crate::math_util::mathfn;
 
 // 1/ln(2)
 const FRAC_1_LN_2: TwoFloat = TwoFloat {
@@ -211,7 +212,7 @@ impl TwoFloat {
             // reduce value to range |r| <= ln(2)/2
             // where self = k*ln(2) + r
 
-            let k = ((FRAC_1_LN_2 * self).hi + 0.5).trunc();
+            let k = mathfn::trunc((FRAC_1_LN_2 * self).hi + 0.5);
             let r = self - LN_2 * k;
 
             // Now approximate the function
@@ -285,7 +286,7 @@ impl TwoFloat {
                 lo: f32::INFINITY,
             }
         } else {
-            let k = self.hi.round();
+            let k = mathfn::round(self.hi);
             let r = self - k;
             let r1 = polynomial!(r, 1.0, EXP2_COEFFS);
             if k == 0.0 {
@@ -316,7 +317,7 @@ impl TwoFloat {
         } else if self <= 0.0 {
             Self::NAN
         } else {
-            let mut x = Self::from(self.hi.ln());
+            let mut x = Self::from(mathfn::ln(self.hi));
             x += self * (-x).exp() - 1.0;
             x + self * (-x).exp() - 1.0
         }
@@ -342,7 +343,7 @@ impl TwoFloat {
         } else if self <= -1.0 {
             Self::NAN
         } else {
-            let mut x = Self::from(self.hi.ln_1p());
+            let mut x = Self::from(mathfn::ln_1p(self.hi));
             let mut e = x.exp_m1();
             x -= (e - self) / (e + 1.0);
             e = x.exp_m1();
