@@ -1,119 +1,119 @@
-use hexf::hexf64;
+use hexf::hexf32;
 
 use crate::TwoFloat;
 
 /// Euler's number (e)
 pub const E: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.5bf0a8b145769p1"),
-    lo: hexf64!("0x1.4d57ee2b1013ap-53"),
+    hi: hexf32!("0x1.5bf0a8p+1"),
+    lo: hexf32!("0x1.628aeep-24"),
 };
 
 /// 1/π
 pub const FRAC_1_PI: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.45f306dc9c883p-2"),
-    lo: hexf64!("-0x1.6b01ec5417056p-56"),
+    hi: hexf32!("0x1.45f306p-2"),
+    lo: hexf32!("0x1.b9391p-27"),
 };
 
 /// 2/π
 pub const FRAC_2_PI: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.45f306dc9c883p-1"),
-    lo: hexf64!("-0x1.6b01ec5417056p-55"),
+    hi: hexf32!("0x1.45f306p-1"),
+    lo: hexf32!("0x1.b9391p-26"),
 };
 
 /// 2/sqrt(π)
 pub const FRAC_2_SQRT_PI: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.20dd750429b6dp0"),
-    lo: hexf64!("0x1.1ae3a914fed8p-56"),
+    hi: hexf32!("0x1.20dd76p+0"),
+    lo: hexf32!("-0x1.f7ac92p-25"),
 };
 
 /// 1/sqrt(2)
 pub const FRAC_1_SQRT_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.6a09e667f3bcdp-1"),
-    lo: hexf64!("-0x1.bdd3413b26456p-55"),
+    hi: hexf32!("0x1.6a09e6p-1"),
+    lo: hexf32!("0x1.9fcef4p-27"),
 };
 
 /// π/2
 pub const FRAC_PI_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.921fb54442d18p0"),
-    lo: hexf64!("0x1.1a62633145c07p-54"),
+    hi: hexf32!("0x1.921fb6p+0"),
+    lo: hexf32!("-0x1.777a5cp-25"),
 };
 
 /// π/3
 pub const FRAC_PI_3: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.0c152382d7366p0"),
-    lo: hexf64!("-0x1.ee6913347c2a6p-54"),
+    hi: hexf32!("0x1.0c1524p+0"),
+    lo: hexf32!("-0x1.f4a326p-26"),
 };
 
 /// π/4
 pub const FRAC_PI_4: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.921fb54442d18p-1"),
-    lo: hexf64!("0x1.1a62633145c07p-55"),
+    hi: hexf32!("0x1.921fb6p-1"),
+    lo: hexf32!("-0x1.777a5cp-26"),
 };
 
 /// π/6
 pub const FRAC_PI_6: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.0c152382d7366p-1"),
-    lo: hexf64!("-0x1.ee6913347c2a6p-55"),
+    hi: hexf32!("0x1.0c1524p-1"),
+    lo: hexf32!("-0x1.f4a326p-27"),
 };
 
 /// π/8
 pub const FRAC_PI_8: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.921fb54442d18p-2"),
-    lo: hexf64!("0x1.1a62633145c07p-56"),
+    hi: hexf32!("0x1.921fb6p-2"),
+    lo: hexf32!("-0x1.777a5cp-27"),
 };
 
 /// ln(2)
 pub const LN_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.62e42fefa39efp-1"),
-    lo: hexf64!("0x1.abc9e3b39803fp-56"),
+    hi: hexf32!("0x1.62e43p-1"),
+    lo: hexf32!("-0x1.05c61p-29"),
 };
 
 /// ln(10)
 pub const LN_10: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.26bb1bbb55516p1"),
-    lo: hexf64!("-0x1.f48ad494ea3e9p-53"),
+    hi: hexf32!("0x1.26bb1cp+1"),
+    lo: hexf32!("-0x1.12aabap-25"),
 };
 
 /// log<sub>2</sub>(e)
 pub const LOG2_E: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.71547652b82fep0"),
-    lo: hexf64!("0x1.777d0ffda0d24p-56"),
+    hi: hexf32!("0x1.715476p+0"),
+    lo: hexf32!("0x1.4ae0cp-26"),
 };
 
 /// log<sub>10</sub>(e)
 pub const LOG10_E: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.bcb7b1526e50ep-2"),
-    lo: hexf64!("0x1.95355baaafad3p-57"),
+    hi: hexf32!("0x1.bcb7b2p-2"),
+    lo: hexf32!("-0x1.5b235ep-27"),
 };
 
 /// log<sub>10</sub>(2)
 pub const LOG10_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.34413509f79ffp-2"),
-    lo: hexf64!("-0x1.9dc1da994fd21p-59"),
+    hi: hexf32!("0x1.344136p-2"),
+    lo: hexf32!("-0x1.ec10cp-27"),
 };
 
 /// log<sub>2</sub>(10)
 pub const LOG2_10: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.a934f0979a371p1"),
-    lo: hexf64!("0x1.7f2495fb7fa6dp-53"),
+    hi: hexf32!("0x1.a934fp+1"),
+    lo: hexf32!("0x1.2f346ep-24"),
 };
 
 /// Archimedes' constant (π)
 pub const PI: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.921fb54442d18p1"),
-    lo: hexf64!("0x1.1a62633145c07p-53"),
+    hi: hexf32!("0x1.921fb6p+1"),
+    lo: hexf32!("-0x1.777a5cp-24"),
 };
 
 /// sqrt(2)
 pub const SQRT_2: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.6a09e667f3bcdp0"),
-    lo: hexf64!("-0x1.bdd3413b26456p-54"),
+    hi: hexf32!("0x1.6a09e6p+0"),
+    lo: hexf32!("0x1.9fcef4p-26"),
 };
 
 /// The full circle constant (τ)
 pub const TAU: TwoFloat = TwoFloat {
-    hi: hexf64!("0x1.921fb54442d18p2"),
-    lo: hexf64!("0x1.1a62633145c07p-52"),
+    hi: hexf32!("0x1.921fb6p+2"),
+    lo: hexf32!("-0x1.777a5cp-23"),
 };
 
 #[cfg(test)]

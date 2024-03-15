@@ -4,7 +4,7 @@
 pub mod common;
 
 use common::*;
-use hexf::hexf64;
+use hexf::hexf32;
 use rand::Rng;
 use twofloat::TwoFloat;
 
