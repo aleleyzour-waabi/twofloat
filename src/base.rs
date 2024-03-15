@@ -10,7 +10,7 @@ const DEG_PER_RAD: TwoFloat = TwoFloat {
 };
 
 const RAD_PER_DEG: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.1df46ap-6"), 
+    hi: hexf32!("0x1.1df46ap-6"),
     lo: hexf32!("0x1.294e9cp-33"),
 };
 
@@ -40,8 +40,7 @@ pub fn no_overlap(a: f32, b: f32) -> bool {
             }
             let bits = a.to_bits();
             let biased_exponent = ((bits >> 23) & EXPONENT_MASK) as i16;
-            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signum(a) != mathfn::signum(b)
-            {
+            let offset = if (bits & MANTISSA_MASK) == 0 && mathfn::signum(a) != mathfn::signum(b) {
                 (1 << 7) + 23 + 1
             } else {
                 (1 << 7) + 23
