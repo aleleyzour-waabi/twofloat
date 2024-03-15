@@ -14,6 +14,18 @@ pub fn random_f32() -> f32 {
     }
 }
 
+pub fn random_f64() -> f64 {
+    let mut engine = rand::thread_rng();
+    let mantissa_dist = rand::distributions::Uniform::new(0, 1u64 << 52);
+    let exponent_dist = rand::distributions::Uniform::new(0, 2047u64);
+    let x = f64::from_bits(engine.sample(mantissa_dist) | (engine.sample(exponent_dist) << 52));
+    if engine.gen() {
+        x
+    } else {
+        -x
+    }
+}
+
 pub fn repeated_test<F>(test: F)
 where
     F: Fn(),
@@ -23,10 +35,20 @@ where
     }
 }
 
-pub fn get_valid_pair<F: Fn(f32, f32) -> bool>(pred: F) -> (f32, f32) {
+pub fn get_valid_pair32<F: Fn(f32, f32) -> bool>(pred: F) -> (f32, f32) {
     loop {
         let a = random_f32();
         let b = random_f32();
+        if pred(a, b) {
+            return (a, b);
+        }
+    }
+}
+
+pub fn get_valid_pair64<F: Fn(f64, f64) -> bool>(pred: F) -> (f64, f64) {
+    loop {
+        let a = random_f64();
+        let b = random_f64();
         if pred(a, b) {
             return (a, b);
         }
@@ -66,14 +88,14 @@ macro_rules! assert_eq_ulp {
         let a_bits = left_val.to_bits();
         let b_bits = right_val.to_bits();
         let fix_sign = |x| {
-            if x & (1 << 31) == 0 {
+            if x & (1 << 63) == 0 {
                 x
             } else {
-                x ^ ((1 << 31) - 1)
+                x ^ ((1 << 63) - 1)
             }
         };
-        let diff = (fix_sign(a_bits) as i32)
-            .saturating_sub(fix_sign(b_bits) as i32)
+        let diff = (fix_sign(a_bits) as i64)
+            .saturating_sub(fix_sign(b_bits) as i64)
             .abs();
         if !(diff <= ulp_val) {
             panic!(r#"assertion failed: `(left == right) ({:?} ulp)`

@@ -5,163 +5,165 @@ use crate::math_util::mathfn;
 
 // 1/ln(2)
 const FRAC_1_LN_2: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.715476p0"),
-    lo: hexf32!("0x1.777d10p-56"),
+    hi: hexf64!("0x1.71547652b82fep0"),
+    lo: hexf64!("0x1.777d0ffda0d24p-56"),
 };
 
 // ln(10)
 const LN_10: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.26bb1cp1"),
-    lo: hexf32!("-0x1.f48ad4p-53"),
+    hi: hexf64!("0x1.26bb1bbb55516p1"),
+    lo: hexf64!("-0x1.f48ad494ea3e9p-53"),
 };
 
 // ln(3/2)
 const LN_FRAC_3_2: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.9f323ep-2"),
-    lo: hexf32!("-0x1.a92e52p-59"),
+    hi: hexf64!("0x1.9f323ecbf984cp-2"),
+    lo: hexf64!("-0x1.a92e513217f5cp-59"),
 };
 
 // limits
-const EXP_UPPER_LIMIT: f32 = hexf32!("0x1.62e430p9"); // ln(0x1.0p1024)
-const EXP_LOWER_LIMIT: f32 = hexf32!("-0x1.743854p9"); // ln(0x1.0p-1074)
+const EXP_UPPER_LIMIT: f32 = hexf32!("0x1.62e430p9"); // ln(0x1.0p128) as f32
+const EXP_LOWER_LIMIT: f32 = hexf32!("-0x1.743854p9"); // ln(0x1.0p-127) as f32
 
 // Coefficients for polynomial approximation of x*(exp(x)+1)/(exp(x)-1)
 const EXP_COEFFS: [TwoFloat; 6] = [
     TwoFloat {
         hi: hexf32!("0x1.555556p-3"),
-        lo: hexf32!("0x1.324604p-57"),
-    },
+        lo: hexf32!("-0x1.555556p-28"),
+	},
     TwoFloat {
         hi: hexf32!("-0x1.6c16c2p-9"),
-        lo: hexf32!("0x1.136a2cp-63"),
+        lo: hexf32!("0x1.27d2a2p-34"),
     },
     TwoFloat {
         hi: hexf32!("0x1.1566acp-14"),
-        lo: hexf32!("0x1.111048p-68"),
+        lo: hexf32!("-0x1.0182c2p-40"),
     },
     TwoFloat {
-        hi: hexf32!("-0x1.bbd776p-20"),
-        lo: hexf32!("0x1.fece88p-76"),
+        hi: hexf32!("-0x1.bbd776p-20"),        
+		lo: hexf32!("-0x1.196a5p-45"),
     },
     TwoFloat {
-        hi: hexf32!("0x1.66a4e6p-25"),
-        lo: hexf32!("-0x1.c8771ep-79"),
+        hi: hexf32!("0x1.66a4e6p-25"),        
+		lo: hexf32!("-0x1.d9ee04p-52"),
     },
     TwoFloat {
-        hi: hexf32!("-0x1.1f6dc2p-30"),
-        lo: hexf32!("-0x1.d03ec4p-84"),
+        hi: hexf32!("-0x1.1f6dc2p-30"),        
+		lo: hexf32!("0x1.d599f4p-60"),
     },
 ];
 
 const EXP_M1_COEFFS: [TwoFloat; 12] = [
     TwoFloat {
-        hi: hexf32!("0x1.0p-1"),
+        hi: hexf32!("0x1p-1"),
         lo: hexf32!("0x1.bd7304p-56"),
-    },
+	},
     TwoFloat {
         hi: hexf32!("0x1.555556p-3"),
-        lo: hexf32!("-0x1.7597a8p-57"),
-    },
+        lo: hexf32!("-0x1.555556p-28"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.555556p-5"),
-        lo: hexf32!("-0x1.ccd976p-59"),
-    },
+        lo: hexf32!("-0x1.555582p-30"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.111112p-7"),
-        lo: hexf32!("0x1.342b20p-61"),
-    },
+        lo: hexf32!("-0x1.dddd48p-32"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.6c16c2p-10"),
-        lo: hexf32!("-0x1.3ce718p-64"),
-    },
+        lo: hexf32!("-0x1.2731ecp-35"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.a01a02p-13"),
-        lo: hexf32!("0x1.d41bdep-71"),
-    },
+        lo: hexf32!("-0x1.7d25a4p-39"),
+	},
     TwoFloat {
-        hi: hexf32!("0x1.a01a00p-16"),
-        lo: hexf32!("0x1.7b3bc0p-70"),
-    },
+        hi: hexf32!("0x1.a01ap-16"),
+        lo: hexf32!("0x1.5d650cp-41"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.71de32p-19"),
-        lo: hexf32!("-0x1.9be0c6p-77"),
-    },
+        lo: hexf32!("0x1.60a154p-44"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.27e62ep-22"),
-        lo: hexf32!("-0x1.41f2a2p-77"),
-    },
+        lo: hexf32!("-0x1.fc994cp-49"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.ae852ep-26"),
-        lo: hexf32!("-0x1.669f12p-81"),
-    },
+        lo: hexf32!("-0x1.d7be22p-51"),
+	},
     TwoFloat {
+		
         hi: hexf32!("0x1.1e22aap-29"),
-        lo: hexf32!("-0x1.83b25ep-85"),
-    },
+        lo: hexf32!("0x1.bb432ep-54"),
+	},
     TwoFloat {
-        hi: hexf32!("0x1.36ab70p-33"),
-        lo: hexf32!("0x1.c16dc2p-89"),
-    },
+        hi: hexf32!("0x1.36ab7p-33"),
+        lo: hexf32!("-0x1.106d44p-58"),
+	},
 ];
 
 // Coefficients for polynomial approximation of 2^x on [-0.5, 0.5]
 const EXP2_COEFFS: [TwoFloat; 14] = [
     TwoFloat {
-        hi: hexf32!("0x1.62e430p-1"),
-        lo: hexf32!("0x1.abcab8p-56"),
-    },
+        hi: hexf32!("0x1.62e43p-1"),
+        lo: hexf32!("-0x1.05c61p-29"),
+	},
     TwoFloat {
-        hi: hexf32!("0x1.ebfbe0p-3"),
-        lo: hexf32!("-0x1.5e431ap-57"),
-    },
+        hi: hexf32!("0x1.ebfbep-3"),
+        lo: hexf32!("-0x1.f4e9c4p-33"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.c6b08ep-5"),
-        lo: hexf32!("-0x1.d70e96p-59"),
-    },
+        lo: hexf32!("-0x1.1f6be8p-30"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.3b2ab6p-7"),
-        lo: hexf32!("0x1.494f20p-62"),
-    },
+        lo: hexf32!("0x1.f749cep-32"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.5d87fep-10"),
-        lo: hexf32!("0x1.1f321ep-64"),
-    },
+        lo: hexf32!("0x1.e299cep-36"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.430912p-13"),
-        lo: hexf32!("0x1.bfc77cp-70"),
-    },
+        lo: hexf32!("0x1.f0d8f2p-38"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.ffcbfcp-17"),
-        lo: hexf32!("-0x1.3d15dcp-71"),
-    },
+        lo: hexf32!("0x1.621fc6p-43"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.62c022p-20"),
-        lo: hexf32!("0x1.f538d8p-75"),
-    },
+        lo: hexf32!("0x1.d2d36ep-47"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.b5253ep-24"),
-        lo: hexf32!("-0x1.2ec9fep-80"),
-    },
+        lo: hexf32!("-0x1.6ee866p-49"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.e4cf52p-28"),
-        lo: hexf32!("-0x1.cc6cb4p-83"),
-    },
+        lo: hexf32!("-0x1.2dbbc6p-53"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.e8ca78p-32"),
-        lo: hexf32!("0x1.c257a8p-86"),
-    },
+        lo: hexf32!("-0x1.01b71cp-58"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.c3bd1cp-36"),
-        lo: hexf32!("-0x1.45f6fap-91"),
-    },
+        lo: hexf32!("0x1.b35c3p-61"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.823566p-40"),
-        lo: hexf32!("0x1.98bc0cp-94"),
-    },
+        lo: hexf32!("-0x1.c071f6p-65"),
+	},
     TwoFloat {
         hi: hexf32!("0x1.31efcap-44"),
-        lo: hexf32!("0x1.c814aap-98"),
-    },
+        lo: hexf32!("0x1.64e6e4p-69"),
+	},
+
 ];
 
 fn mul_pow2(mut x: f32, mut y: i32) -> f32 {

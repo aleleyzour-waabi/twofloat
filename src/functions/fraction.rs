@@ -55,9 +55,9 @@ impl TwoFloat {
     ///
     /// ```
     /// # use twofloat::TwoFloat;
-    /// let a = TwoFloat::new_add(1.0, 1e-200).ceilf();
-    /// let b = TwoFloat::new_add(1.0, -1e-200).ceilf();
-    /// let c = TwoFloat::new_add(-1.0, 1e-200).ceilf();
+    /// let a = TwoFloat::new_add(1.0, 1e-200).ceil();
+    /// let b = TwoFloat::new_add(1.0, -1e-200).ceil();
+    /// let c = TwoFloat::new_add(-1.0, 1e-200).ceil();
     ///
     /// assert_eq!(a, TwoFloat::from(2.0));
     /// assert_eq!(b, TwoFloat::from(1.0));

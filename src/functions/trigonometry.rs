@@ -11,31 +11,31 @@ use crate::{
 const SIN_COEFFS: [TwoFloat; 7] = [
     TwoFloat {
         hi: hexf32!("-0x1.555556p-3"),
-        lo: hexf32!("-0x1.3a26eap-57"),
+        lo: hexf32!("0x1.555556p-28"),
     },
     TwoFloat {
         hi: hexf32!("0x1.111112p-7"),
-        lo: hexf32!("-0x1.487cfcp-63"),
+        lo: hexf32!("-0x1.ddddep-32"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.a01a02p-13"),
-        lo: hexf32!("-0x1.223410p-67"),
+        lo: hexf32!("0x1.7fa07ep-39"),
     },
     TwoFloat {
         hi: hexf32!("0x1.71de3ap-19"),
-        lo: hexf32!("0x1.1ddd0ap-75"),
+        lo: hexf32!("0x1.498c54p-45"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.ae6452p-26"),
-        lo: hexf32!("0x1.cb014cp-84"),
+        lo: hexf32!("0x1.4a55c6p-52"),
     },
     TwoFloat {
-        hi: hexf32!("0x1.612010p-33"),
-        lo: hexf32!("0x1.0dba7cp-88"),
+        hi: hexf32!("0x1.61201p-33"),
+        lo: hexf32!("0x1.e6c7dp-58"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.aa6c44p-41"),
-        lo: hexf32!("0x1.df71eap-95"),
+        lo: hexf32!("0x1.d5d212p-66"),
     },
 ];
 
@@ -43,31 +43,31 @@ const SIN_COEFFS: [TwoFloat; 7] = [
 const COS_COEFFS: [TwoFloat; 7] = [
     TwoFloat {
         hi: hexf32!("0x1.555556p-5"),
-        lo: hexf32!("0x1.4b27fap-59"),
+        lo: hexf32!("-0x1.555556p-30"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.6c16c2p-10"),
-        lo: hexf32!("0x1.1e7208p-64"),
+        lo: hexf32!("0x1.27d27ep-35"),
     },
     TwoFloat {
         hi: hexf32!("0x1.a01a02p-16"),
-        lo: hexf32!("0x1.adea80p-71"),
+        lo: hexf32!("-0x1.7f9d0cp-42"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.27e4fcp-22"),
-        lo: hexf32!("-0x1.a26582p-76"),
+        lo: hexf32!("0x1.143ffap-47"),
     },
     TwoFloat {
         hi: hexf32!("0x1.1eed8cp-29"),
-        lo: hexf32!("-0x1.551d14p-85"),
+        lo: hexf32!("0x1.0f4b4ap-54"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.93931cp-37"),
-        lo: hexf32!("0x1.251250p-91"),
+        lo: hexf32!("-0x1.52d784p-62"),
     },
     TwoFloat {
         hi: hexf32!("0x1.aabaa8p-45"),
-        lo: hexf32!("0x1.4cf2f2p-99"),
+        lo: hexf32!("0x1.65c67p-75"),
     },
 ];
 
@@ -75,59 +75,59 @@ const COS_COEFFS: [TwoFloat; 7] = [
 const TAN_COEFFS: [TwoFloat; 14] = [
     TwoFloat {
         hi: hexf32!("0x1.555556p-2"),
-        lo: hexf32!("-0x1.38ef22p-56"),
+        lo: hexf32!("-0x1.55559ep-27"),
     },
     TwoFloat {
         hi: hexf32!("0x1.111112p-3"),
-        lo: hexf32!("0x1.db464ep-57"),
+        lo: hexf32!("-0x1.dda77ep-28"),
     },
     TwoFloat {
         hi: hexf32!("0x1.ba1ba2p-5"),
-        lo: hexf32!("0x1.b2454cp-61"),
+        lo: hexf32!("-0x1.59ec58p-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.664f4cp-6"),
-        lo: hexf32!("0x1.bb1ac0p-61"),
+        lo: hexf32!("-0x1.78b602p-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.226deep-7"),
-        lo: hexf32!("-0x1.911058p-63"),
+        lo: hexf32!("-0x1.f8c99ep-32"),
     },
     TwoFloat {
-        hi: hexf32!("0x1.d6ddb0p-9"),
-        lo: hexf32!("-0x1.654e38p-65"),
+        hi: hexf32!("0x1.d6ddbp-9"),
+        lo: hexf32!("-0x1.7dfeb6p-34"),
     },
     TwoFloat {
         hi: hexf32!("0x1.7d2be8p-10"),
-        lo: hexf32!("-0x1.d33168p-64"),
+        lo: hexf32!("0x1.b3c2ecp-35"),
     },
     TwoFloat {
         hi: hexf32!("0x1.395c8cp-11"),
-        lo: hexf32!("-0x1.5c77d4p-66"),
+        lo: hexf32!("-0x1.0c9c34p-36"),
     },
     TwoFloat {
         hi: hexf32!("0x1.c3c79cp-13"),
-        lo: hexf32!("0x1.7af98ep-69"),
+        lo: hexf32!("0x1.b57be8p-38"),
     },
     TwoFloat {
         hi: hexf32!("0x1.399daep-13"),
-        lo: hexf32!("-0x1.793a98p-68"),
+        lo: hexf32!("-0x1.3783c6p-41"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.6a82acp-15"),
-        lo: hexf32!("0x1.48e106p-73"),
+        lo: hexf32!("0x1.51ade6p-40"),
     },
     TwoFloat {
         hi: hexf32!("0x1.b3221ep-14"),
-        lo: hexf32!("-0x1.049e00p-69"),
+        lo: hexf32!("-0x1.24e76ap-39"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.b4a2a4p-15"),
-        lo: hexf32!("0x1.cb2116p-69"),
+        lo: hexf32!("0x1.7eeb0cp-42"),
     },
     TwoFloat {
-        hi: hexf32!("0x1.7917a0p-16"),
-        lo: hexf32!("-0x1.9ff850p-70"),
+        hi: hexf32!("0x1.7917ap-16"),
+        lo: hexf32!("0x1.7227e4p-42"),
     },
 ];
 
@@ -135,43 +135,43 @@ const TAN_COEFFS: [TwoFloat; 14] = [
 const ASIN_COEFFS: [TwoFloat; 10] = [
     TwoFloat {
         hi: hexf32!("0x1.555556p-3"),
-        lo: hexf32!("-0x1.1e68b2p-25"),
+        lo: hexf32!("-0x1.55f4aep-28"),
     },
     TwoFloat {
         hi: hexf32!("0x1.333334p-4"),
-        lo: hexf32!("0x1.3f58bep-30"),
+        lo: hexf32!("-0x1.f3da76p-30"),
     },
     TwoFloat {
         hi: hexf32!("0x1.6db6bcp-5"),
-        lo: hexf32!("-0x1.855246p-29"),
+        lo: hexf32!("-0x1.8a85eep-30"),
     },
     TwoFloat {
         hi: hexf32!("0x1.f1ce02p-6"),
-        lo: hexf32!("-0x1.14c7aep-29"),
+        lo: hexf32!("-0x1.a1d4aap-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.6e1af8p-6"),
-        lo: hexf32!("-0x1.3d908p-29"),
+        lo: hexf32!("0x1.65d05p-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.20d826p-6"),
-        lo: hexf32!("-0x1.4494bp-31"),
+        lo: hexf32!("0x1.4d49b4p-31"),
     },
     TwoFloat {
         hi: hexf32!("0x1.8d6db6p-7"),
-        lo: hexf32!("-0x1.84946p-29"),
+        lo: hexf32!("0x1.9e2b38p-34"),
     },
     TwoFloat {
-        hi: hexf32!("0x1.3c0480p-6"),
-        lo: hexf32!("0x1.c33e0ap-30"),
+        hi: hexf32!("0x1.3c048p-6"),
+        lo: hexf32!("-0x1.533276p-31"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.401c6ap-7"),
-        lo: hexf32!("-0x1.a22824p-35"),
+        lo: hexf32!("0x1.7bb1bap-33"),
     },
     TwoFloat {
         hi: hexf32!("0x1.119828p-5"),
-        lo: hexf32!("-0x1.baf2bep-30"),
+        lo: hexf32!("-0x1.749e56p-31"),
     },
 ];
 
@@ -179,74 +179,74 @@ const ASIN_COEFFS: [TwoFloat; 10] = [
 const ATAN_COEFFS: [TwoFloat; 15] = [
     TwoFloat {
         hi: hexf32!("-0x1.555556p-2"),
-        lo: hexf32!("-0x1.5381cap-56"),
+        lo: hexf32!("0x1.555556p-27"),
     },
     TwoFloat {
         hi: hexf32!("0x1.99999ap-3"),
-        lo: hexf32!("0x1.4577f0p-57"),
+        lo: hexf32!("-0x1.99999ap-29"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.24924ap-3"),
-        lo: hexf32!("-0x1.431a10p-57"),
+        lo: hexf32!("0x1.b6db86p-28"),
     },
     TwoFloat {
         hi: hexf32!("0x1.c71c72p-4"),
-        lo: hexf32!("-0x1.5849aep-61"),
+        lo: hexf32!("-0x1.c757f2p-31"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.745d18p-4"),
-        lo: hexf32!("0x1.bb4a56p-58"),
+        lo: hexf32!("0x1.77482p-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.3b13b2p-4"),
-        lo: hexf32!("-0x1.e54aeap-59"),
+        lo: hexf32!("-0x1.ec37acp-29"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.11110cp-4"),
-        lo: hexf32!("0x1.fe1cb4p-62"),
+        lo: hexf32!("-0x1.062eaap-29"),
     },
     TwoFloat {
         hi: hexf32!("0x1.e1e146p-5"),
-        lo: hexf32!("-0x1.9e0fa6p-59"),
+        lo: hexf32!("-0x1.184c38p-30"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.af20aep-5"),
-        lo: hexf32!("0x1.ac847ep-59"),
+        lo: hexf32!("-0x1.3002ecp-33"),
     },
     TwoFloat {
         hi: hexf32!("0x1.85cf5ep-5"),
-        lo: hexf32!("0x1.1e116ep-62"),
+        lo: hexf32!("0x1.94240ep-30"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.622b3ep-5"),
-        lo: hexf32!("-0x1.facb66p-60"),
+        lo: hexf32!("-0x1.19952cp-30"),
     },
     TwoFloat {
         hi: hexf32!("0x1.3d3eaap-5"),
-        lo: hexf32!("-0x1.5fa026p-59"),
+        lo: hexf32!("-0x1.d8156cp-30"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.07d294p-5"),
-        lo: hexf32!("-0x1.7b32fap-59"),
+        lo: hexf32!("0x1.192a0cp-32"),
     },
     TwoFloat {
         hi: hexf32!("0x1.5f9188p-6"),
-        lo: hexf32!("-0x1.a21e26p-66"),
+        lo: hexf32!("0x1.abf73p-33"),
     },
     TwoFloat {
         hi: hexf32!("-0x1.09daeep-7"),
-        lo: hexf32!("0x1.fbd4ccp-61"),
+        lo: hexf32!("-0x1.1d8a9cp-33"),
     },
 ];
 
 const ATAN_FRAC_1_2: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.dac670p-2"),
-    lo: hexf32!("0x1.a2b7f2p-56"),
+    hi: hexf32!("0x1.dac67p-2"),
+    lo: hexf32!("0x1.586ed4p-28"),
 };
 
 const ATAN_FRAC_3_2: TwoFloat = TwoFloat {
     hi: hexf32!("0x1.f730bep-1"),
-    lo: hexf32!("0x1.007888p-56"),
+    lo: hexf32!("-0x1.afc12cp-26"),
 };
 
 fn quadrant(value: TwoFloat) -> (TwoFloat, i8) {
@@ -297,7 +297,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.sin();
-    /// let c = 2.5f32.sin();
+    /// let c = 2.5f64.sin();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -322,7 +322,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.cos();
-    /// let c = 2.5f32.cos();
+    /// let c = 2.5f64.cos();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -350,8 +350,8 @@ impl TwoFloat {
     /// let a = TwoFloat::from(2.5);
     /// let (s, c) = a.sin_cos();
     ///
-    /// assert!((s - 2.5f32.sin()).abs() < 1e-10);
-    /// assert!((c - 2.5f32.cos()).abs() < 1e-10);
+    /// assert!((s - 2.5f64.sin()).abs() < 1e-10);
+    /// assert!((c - 2.5f64.cos()).abs() < 1e-10);
     /// ```
     pub fn sin_cos(self) -> (Self, Self) {
         if !self.is_valid() {
@@ -376,7 +376,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(2.5);
     /// let b = a.tan();
-    /// let c = 2.5f32.tan();
+    /// let c = 2.5f64.tan();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -401,7 +401,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(0.7);
     /// let b = a.asin();
-    /// let c = 0.7f32.asin();
+    /// let c = 0.7f64.asin();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -431,7 +431,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(-0.8);
     /// let b = a.acos();
-    /// let c = (-0.8f32).acos();
+    /// let c = (-0.8f64).acos();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -453,7 +453,7 @@ impl TwoFloat {
     /// # use twofloat::TwoFloat;
     /// let a = TwoFloat::from(3.5);
     /// let b = a.atan();
-    /// let c = 3.5f32.atan();
+    /// let c = 3.5f64.atan();
     ///
     /// assert!((b - c).abs() < 1e-10);
     /// ```
@@ -619,26 +619,25 @@ mod tests {
     #[test]
     fn asin_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).asin());
-        assert!((0.25f32.asin() - TwoFloat::from(0.25).asin()) < THRESHOLD);
-        assert!((0.75f32.asin() - TwoFloat::from(0.75).asin()) < THRESHOLD);
+        assert!((0.25f64.asin() - TwoFloat::from(0.25).asin()) < THRESHOLD);
+        assert!((0.75f64.asin() - TwoFloat::from(0.75).asin()) < THRESHOLD);
         assert!((TwoFloat::from(1.0).asin() - FRAC_PI_2).abs() < THRESHOLD);
 
-        assert!((0.25f32.asin() + TwoFloat::from(-0.25).asin()) < THRESHOLD);
-        assert!((0.75f32.asin() + TwoFloat::from(-0.75).asin()) < THRESHOLD);
+        assert!((0.25f64.asin() + TwoFloat::from(-0.25).asin()) < THRESHOLD);
+        assert!((0.75f64.asin() + TwoFloat::from(-0.75).asin()) < THRESHOLD);
         assert!((TwoFloat::from(-1.0).asin() + FRAC_PI_2).abs() < THRESHOLD);
     }
 
     #[test]
     fn acos_test() {
-        let _one_pi_over_4 = TwoFloat::from(3.14159274f32) / TwoFloat::from(4.0);
         assert!((TwoFloat::from(0.0).acos() - FRAC_PI_2).abs() < THRESHOLD);
 
-        assert!(approx_eq(0.25f64.acos(), TwoFloat::from(0.25).acos()));
-        assert!(approx_eq(0.75f64.acos(), TwoFloat::from(0.75).acos()));
+        assert!((0.25f64.acos() - TwoFloat::from(0.25).acos()) < THRESHOLD);
+        assert!((0.75f64.acos() - TwoFloat::from(0.75).acos()) < THRESHOLD);
         assert_eq!(0.0, TwoFloat::from(1.0).acos());
 
-        assert!((0.25f32.asin() - TwoFloat::from(-0.25).acos()) < THRESHOLD);
-        assert!((0.75f32.asin() - TwoFloat::from(-0.75).acos()) < THRESHOLD);
+        assert!((0.25f64.asin() - TwoFloat::from(-0.25).acos()) < THRESHOLD);
+        assert!((0.75f64.asin() - TwoFloat::from(-0.75).acos()) < THRESHOLD);
         assert!((TwoFloat::from(-1.0).acos() - PI).abs() < THRESHOLD);
     }
 
@@ -646,17 +645,17 @@ mod tests {
     fn atan_test() {
         assert_eq!(0.0, TwoFloat::from(0.0).atan());
 
-        assert!((0.25f32.atan() - TwoFloat::from(0.25).atan()).abs() < THRESHOLD);
-        assert!((0.5f32.atan() - TwoFloat::from(0.5).atan()).abs() < THRESHOLD);
+        assert!((0.25f64.atan() - TwoFloat::from(0.25).atan()).abs() < THRESHOLD);
+        assert!((0.5f64.atan() - TwoFloat::from(0.5).atan()).abs() < THRESHOLD);
         assert!((FRAC_PI_4 - TwoFloat::from(1.0).atan()).abs() < THRESHOLD);
-        assert!((2.25f32.atan() - TwoFloat::from(2.25).atan()).abs() < THRESHOLD);
-        assert!((10.0f32.atan() - TwoFloat::from(10.0).atan()).abs() < THRESHOLD);
+        assert!((2.25f64.atan() - TwoFloat::from(2.25).atan()).abs() < THRESHOLD);
+        assert!((10.0f64.atan() - TwoFloat::from(10.0).atan()).abs() < THRESHOLD);
 
-        assert!((0.25f32.atan() + TwoFloat::from(-0.25).atan()).abs() < THRESHOLD);
-        assert!((0.5f32.atan() + TwoFloat::from(-0.5).atan()).abs() < THRESHOLD);
+        assert!((0.25f64.atan() + TwoFloat::from(-0.25).atan()).abs() < THRESHOLD);
+        assert!((0.5f64.atan() + TwoFloat::from(-0.5).atan()).abs() < THRESHOLD);
         assert!((FRAC_PI_4 + TwoFloat::from(-1.0).atan()).abs() < THRESHOLD);
-        assert!((2.25f32.atan() + TwoFloat::from(-2.25).atan()).abs() < THRESHOLD);
-        assert!((10.0f32.atan() + TwoFloat::from(-10.0).atan()).abs() < THRESHOLD);
+        assert!((2.25f64.atan() + TwoFloat::from(-2.25).atan()).abs() < THRESHOLD);
+        assert!((10.0f64.atan() + TwoFloat::from(-10.0).atan()).abs() < THRESHOLD);
     }
 
     #[test]
@@ -668,7 +667,7 @@ mod tests {
         assert_eq!(FRAC_PI_2, TwoFloat::from(1.0).atan2(TwoFloat::from(0.0)));
         assert_eq!(-FRAC_PI_2, TwoFloat::from(-1.0).atan2(TwoFloat::from(0.0)));
         assert!(
-            (0.73f32.atan2(0.21f32) - TwoFloat::from(0.73).atan2(TwoFloat::from(0.21))).abs()
+            (0.73f64.atan2(0.21f64) - TwoFloat::from(0.73).atan2(TwoFloat::from(0.21))).abs()
                 < THRESHOLD
         );
     }

@@ -5,13 +5,13 @@ use hexf::hexf32;
 use crate::{math_util::mathfn, TwoFloat};
 
 const DEG_PER_RAD: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.ca5dc2p5"),
-    lo: hexf32!("-0x1.1e7ab4p-49"),
+    hi: hexf32!("0x1.ca5dc2p+5"),
+    lo: hexf32!("-0x1.670f82p-21"),
 };
 
 const RAD_PER_DEG: TwoFloat = TwoFloat {
-    hi: hexf32!("0x1.1df46ap-6"),
-    lo: hexf32!("0x1.5c1d8cp-62"),
+    hi: hexf32!("0x1.1df46ap-6"), 
+    lo: hexf32!("0x1.294e9cp-33"),
 };
 
 const EXPONENT_MASK: u32 = (1 << 8) - 1;
@@ -413,7 +413,7 @@ mod tests {
         assert!(no_overlap(1.0, 0.0));
         assert!(no_overlap(-1.0, -0.0));
 
-        assert!(!no_overlap(hexf32!("0x1p-103"), hexf32!("0x1p-126"))); // why? for f64 was 1p-970, 970 = ((1<<10) -1) - 53), 127 - 24 = 103
+        assert!(!no_overlap(hexf32!("0x1p-103"), hexf32!("0x1p-126"))); // why126 ? for f64 was 1p-970, 970 = ((1<<10) -1) - 52 -1) => 127 - 23 -1 = 103
         assert!(no_overlap(hexf32!("0x1p-103"), hexf32!("0x1p-127")));
         assert!(!no_overlap(hexf32!("0x1p-104"), hexf32!("0x1p-127")));
         assert!(no_overlap(hexf32!("0x1p-104"), hexf32!("0x1p-128")));

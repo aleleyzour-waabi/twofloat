@@ -39,7 +39,7 @@ fn exp_test() {
 #[test]
 fn exp_m1_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::<f32>::new(-10.0, 10.0);
+    let src_dist = rand::distributions::Uniform::<f64>::new(-10.0, 10.0);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);
@@ -65,7 +65,7 @@ fn exp_m1_test() {
 #[test]
 fn ln_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::new(f32::from_bits(1u32), f32::MAX);
+    let src_dist = rand::distributions::Uniform::new(f64::from_bits(1u64), f64::MAX);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);
@@ -100,7 +100,7 @@ fn ln_negative_test() {
 #[test]
 fn ln_1p_test() {
     let mut rng = rand::thread_rng();
-    let src_dist = rand::distributions::Uniform::new(-1.0 + f32::EPSILON, f32::MAX);
+    let src_dist = rand::distributions::Uniform::new(-1.0 + f64::EPSILON, f64::MAX);
 
     repeated_test(|| {
         let a = rng.sample(src_dist);

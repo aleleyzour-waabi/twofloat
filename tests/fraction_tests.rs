@@ -85,7 +85,7 @@ fn fract_lo_fract_test() {
 #[test]
 fn fract_no_lo_word_test() {
     repeated_test(|| {
-        let a = random_f32();
+        let a = random_f64();
         let source = TwoFloat::from(a);
         let expected = a.fract();
         let result = source.fract();
@@ -181,7 +181,7 @@ fn trunc_lo_fract_test() {
 #[test]
 fn trunc_no_lo_word_test() {
     repeated_test(|| {
-        let a = random_f32();
+        let a = random_f64();
         let source = TwoFloat::from(a);
         let result = source.trunc();
 
@@ -287,7 +287,7 @@ fn ceil_lo_fract_test() {
 #[test]
 fn ceil_no_lo_word_test() {
     repeated_test(|| {
-        let a = random_f32();
+        let a = random_f64();
         let source = TwoFloat::from(a);
         let result = source.ceil();
 
@@ -392,7 +392,7 @@ fn floor_lo_fract_test() {
 #[test]
 fn floor_no_lo_word_test() {
     repeated_test(|| {
-        let a = random_f32();
+        let a = random_f64();
         let source = TwoFloat::from(a);
         let result = source.floor();
 
@@ -547,7 +547,7 @@ fn round_lo_half_test() {
 #[test]
 fn round_no_lo_word_test() {
     repeated_test(|| {
-        let a = random_f32();
+        let a = random_f64();
         let source = TwoFloat::from(a);
         let result = source.round();
 
